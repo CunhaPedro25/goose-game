@@ -28,6 +28,15 @@
 *.so.*
 *.dylib
 
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Executables
 *.exe
 *.out
@@ -35,8 +44,6 @@
 *.i*86
 *.x86_64
 *.hex
-*
-!/**/
 
 # Debug files
 *.dSYM/
