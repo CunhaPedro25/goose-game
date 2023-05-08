@@ -9,13 +9,13 @@ int main(){
 
   drawBoard();
 
-  for (int i = 1; i < 2; i++){
+  for (int i = 1; i <= 4; i++){
     drawPlayer(i, 1);
   }
 
   int selection;
   do{
-    moveCursor(0,10);
+    moveCursor(0,31);
     printf("Select Tile >");
     drawPlayer(RED, selection = getNumber());
   }while(selection != 0);

@@ -6,36 +6,42 @@
 Player players[4] = {
     { RED, 0 },
     { GREEN, 0 },
+    { YELLOW, 0 },
+    { BLUE, 0 },
 };
 
 void drawPlayer(int id, int tile) {
-    int oldTile = players[id - 1].currentTile;
     int x, y;
+    int oldTile = players[id - 1].currentTile;
 
     // get position of old tile
-    getGameTilePosition(oldTile + 1, &x, &y);
+    getGameTilePosition(oldTile, &x, &y);
 
     // calculate coordinates of old player position
-    int old_player_x = y * 5 + players[id - 1].id + 1;
-    int old_player_y = x * 2 + 1 + 1;
+    int old_player_x = y * 6 + players[id - 1].id + 1;
+    int old_player_y = x * 3 + 1 + 1;
 
     // clear old player position
     moveCursor(old_player_x, old_player_y);
+    setBackgroundColor(getGameTileType(oldTile), 0);
     printf(" ");
+    resetColor();
+
 
     // update player's current tile
-    players[id - 1].currentTile = tile - 1;
+    players[id - 1].currentTile = tile;
 
     // get position of new tile
     getGameTilePosition(tile, &x, &y);
 
     // calculate coordinates of new player position
-    int new_player_x = y * 5 + players[id - 1].id + 1;
-    int new_player_y = x * 2 + 1 + 1;
+    int new_player_x = y * 6 + players[id - 1].id + 1;
+    int new_player_y = x * 3 + 1 + 1;
 
     // draw player on new tile
     moveCursor(new_player_x, new_player_y);
-    printf("\e[%dm", 30 + id);
+    setBackgroundColor(id, 1);
+    setTextColor(id, 0);
     printf("o");
-    printf("\e[%dm", 0);
+    resetColor();
 }

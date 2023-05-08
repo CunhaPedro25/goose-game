@@ -2,8 +2,10 @@
 #define TILES_H
 
 typedef enum{
-  EMPTY,
-  QUESTION,
+  END,
+  BOOL = 3,
+  MULTIPLE = 4,
+  WRITTEN = 5
 }gameTileType;
 
 typedef struct gameTile {
@@ -14,5 +16,6 @@ typedef struct gameTile {
 
 void drawBoard();
 void getGameTilePosition(int tileNumber, int* x, int* y);
+int getGameTileType(int tileNumber);
 
 #endif
