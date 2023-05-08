@@ -13,6 +13,6 @@ enum terrain{
   WATER
 };
 
-void drawTerrain(int size);
+void drawTerrain(int width, int height);
 
 #endif
