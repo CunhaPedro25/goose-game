@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "tiles/tiles.h"
+#include "board/board.h"
 #include "player/player.h"
 #include "utils/ui.h"
 #include "utils/functions.h"
@@ -7,9 +7,7 @@
 int main(){
   clearConsole();
 
-  for (int i = 0; i < 8; i++){
-    drawTile(i);
-  }
+  drawBoard();
 
   for (int i = 1; i < 2; i++){
     drawPlayer(i, 1);

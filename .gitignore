@@ -1,3 +1,12 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Prerequisites
 *.d
 
@@ -28,14 +37,8 @@
 *.so.*
 *.dylib
 
-# Ignore all
-*
-
-# Unignore all with extensions
-!*.*
-
-# Unignore all dirs
-!*/
+# Folder for offtopic stuff
+/offtopic
 
 # Executables
 *.exe

@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "tiles.h"
+#include "board.h"
 #include "../utils/ui.h"
 
-Tile tiles[8] = {
+GameTile gameTiles[] = {
   {0, 0, EMPTY},
   {0, 1, EMPTY},
   {0, 2, QUESTION},
@@ -13,22 +13,28 @@ Tile tiles[8] = {
   {3, 4, EMPTY},
 };
 
-void drawTile(int number) {
-  int new_x = tiles[number].y * 5 + 1;
-  int new_y = tiles[number].x * 2 + 1;
+void drawGameTile(int number) {
+  int new_x = gameTiles[number].y * 5 + 1;
+  int new_y = gameTiles[number].x * 2 + 1;
 
   moveCursor(new_x, new_y);
-  printf("| %d. |", number+1);
+  printf("| %2d |", number+1);
   moveCursor(new_x, new_y + 1);
   printf("|    |");
 }
 
+void drawBoard(){
+  for(int i = 0; i < sizeof(gameTiles)/sizeof(gameTiles[0]); i++){
+    drawGameTile(i);
+  }
+}
+
 // get the position of a tile given its number
-void getTilePosition(int tileNumber, int* x, int* y) {
+void getGameTilePosition(int tileNumber, int* x, int* y) {
   // convert tile number to zero-indexed array index
   tileNumber -= 1;
 
   // calculate x and y position of tile
-  *x = tiles[tileNumber].x;
-  *y = tiles[tileNumber].y;
+  *x = gameTiles[tileNumber].x;
+  *y = gameTiles[tileNumber].y;
 }

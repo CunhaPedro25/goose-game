@@ -1,7 +1,7 @@
 // in player.c
 #include "player.h"
 #include "../utils/ui.h"
-#include "../tiles/tiles.h"
+#include "../board/board.h"
 
 Player players[4] = {
     { RED, 0 },
@@ -13,7 +13,7 @@ void drawPlayer(int id, int tile) {
     int x, y;
 
     // get position of old tile
-    getTilePosition(oldTile + 1, &x, &y);
+    getGameTilePosition(oldTile + 1, &x, &y);
 
     // calculate coordinates of old player position
     int old_player_x = y * 5 + players[id - 1].id + 1;
@@ -27,7 +27,7 @@ void drawPlayer(int id, int tile) {
     players[id - 1].currentTile = tile - 1;
 
     // get position of new tile
-    getTilePosition(tile, &x, &y);
+    getGameTilePosition(tile, &x, &y);
 
     // calculate coordinates of new player position
     int new_player_x = y * 5 + players[id - 1].id + 1;
