@@ -6,10 +6,19 @@
 typedef enum {
   BLACK,
   RED,
-  GREEN
+  GREEN,
+  YELLOW,
+  BLUE,
+  MAGENTA,
+  CYAN,
+  WHITE,
 } Color;
 
 void moveCursor(int x, int y);
 void clearConsole();
+
+void setTextColor(int color, int bright);
+void setBackgroundColor(int color, int bright);
+void resetColor();
 
 #endif /* UI_H */
