@@ -114,4 +114,6 @@ void drawTerrain(int size){
     }
   }
 
+
+  free(map);
 }
