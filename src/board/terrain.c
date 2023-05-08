@@ -97,20 +97,21 @@ void drawTerrain(int size){
 
   generateTerrain(map, size);
 
-  int new_x = 0;
-  int new_y = 0;
+  int x = 0;
+  int y = 0;
 
   for(int i = 0; i < size; i++){
     for(int j = 0; j < size; j++){
-      new_x = j * 6 +1; 
-      new_y = i * 3 +1;
+      x = j * 6 +1; 
+      y = i * 3 +1;
 
-      moveCursor(new_x, new_y);
-      printf("\e[%dm      \e[0m", 100+map[i][j]);
-      moveCursor(new_x, new_y+1);
-      printf("\e[%dm      \e[0m", 100+map[i][j]);
-      moveCursor(new_x, new_y+2);
-      printf("\e[%dm      \e[0m", 100+map[i][j]);
+      setBackgroundColor(map[i][j], 1);
+      for (int i = 0; i < 3; i++)
+      {
+        moveCursor(x, y + i);
+        printf("      ");
+      }
+      resetColor();
     }
   }
 
