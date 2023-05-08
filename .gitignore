@@ -1,3 +1,12 @@
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
 # Prerequisites
 *.d
 
@@ -28,6 +37,9 @@
 *.so.*
 *.dylib
 
+# Folder for offtopic stuff
+/offtopic
+
 # Executables
 *.exe
 *.out
@@ -50,3 +62,18 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+/src/cmake-build-debug
+
+#IDE
+/.idea
+/.vscode
+
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
