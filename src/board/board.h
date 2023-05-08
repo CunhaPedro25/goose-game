@@ -2,7 +2,7 @@
 #define TILES_H
 
 typedef enum{
-  END,
+  END = 9,
   BOOL = 3,
   MULTIPLE = 4,
   WRITTEN = 5
