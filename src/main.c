@@ -15,7 +15,7 @@ int main(){
 
   int selection;
   do{
-    moveCursor(0,31);
+    moveCursor(0,getBoardMaxHeight()+2);
     printf("Select Tile >");
     drawPlayer(RED, selection = getNumber());
   }while(selection != 0);

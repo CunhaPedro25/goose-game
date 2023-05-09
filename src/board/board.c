@@ -4,27 +4,35 @@
 #include "terrain.h"
 
 GameTile gameTiles[] = {
-  {0, 0, BOOL},
-  {1, 0, MULTIPLE},        
-  {2, 0, WRITTEN},
-  {3, 0, BOOL},
-  {3, 1, MULTIPLE},
-  {3, 2, BOOL},
-  {3, 3, BOOL},
-  {4, 3, WRITTEN},
-  {5, 3, BOOL},
-  {6, 3, BOOL},
-  {7, 3, WRITTEN},
-  {8, 3, BOOL},
-  {9, 3, BOOL},
-  {10, 3, BOOL},
-  {10, 4, BOOL},
-  {10, 5, MULTIPLE},
-  {10, 6, BOOL},
-  {9, 6, MULTIPLE},
-  {8, 6, BOOL},
-  {7, 6, WRITTEN},
-  {6, 6, END}
+  {1, 1, BOOL},
+  {2, 1, MULTIPLE},        
+  {3, 1, WRITTEN},
+  {4, 1, BOOL},
+  {5, 1, MULTIPLE},        
+  {6, 1, WRITTEN},
+
+  {6, 2, BOOL},
+  {6, 3, MULTIPLE},        
+  {6, 4, WRITTEN},
+  {6, 5, BOOL},
+  {6, 6, MULTIPLE},        
+  {6, 7, WRITTEN},
+
+  {5, 7, BOOL},
+  {4, 7, MULTIPLE},        
+  {3, 7, WRITTEN},
+  {2, 7, BOOL},
+  {1, 7, MULTIPLE},
+
+  {1, 6, WRITTEN},
+  {1, 5, BOOL},
+  {1, 4, WRITTEN},
+  {1, 3, MULTIPLE},
+
+  {2, 3, BOOL},
+  {3, 3, MULTIPLE},
+
+  {4, 3, END},
 };
 
 // get the position of a tile given its number
@@ -44,6 +52,26 @@ int getGameTileType(int tileNumber) {
 
   // return the type of the tile
   return gameTiles[tileNumber].type;
+}
+
+int getBoardMaxHeight(){
+  int height;
+
+  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
+    if (gameTiles[i].y > height) {
+        height = gameTiles[i].y;
+    }
+  } 
+}
+
+int getBoardMaxWidth(){
+  int width;
+  
+  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
+    if (gameTiles[i].x > width) {
+        width = gameTiles[i].x;
+    }
+  } 
 }
 
 int getEndTilePosition(int *x, int *y){
@@ -75,19 +103,7 @@ void drawGameTile(int number) {
 }
 
 void drawBoard(){
-  int width = 0;
-  int height = 0;
-
-  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
-    if (gameTiles[i].x > width) {
-        width = gameTiles[i].x;
-    }
-    if (gameTiles[i].y > height) {
-        height = gameTiles[i].y;
-    }
-  } 
-
-  drawTerrain(width+2, height+2);
+  drawTerrain();
 
   for(int i = 0; i < sizeof(gameTiles)/sizeof(gameTiles[0]); i++){
     drawGameTile(i);

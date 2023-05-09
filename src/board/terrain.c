@@ -36,9 +36,13 @@ void generateWater(int **map, int width, int height){
   // add some random water tiles
   getEndTilePosition(&i, &j);
   map[j][i] = WATER;
-  map[j-1][i] = WATER;
+  if(j > 0){   
+    map[j-1][i] = WATER;
+  }
   map[j+1][i] = WATER;
-  map[j][i-1] = WATER;
+  if(i > 0){
+    map[j][i-1] = WATER;
+  }
   map[j][i+1] = WATER;
   num_water_tiles += 5;
 
@@ -93,8 +97,10 @@ void generateTerrain(int **map, int width, int height){
   generateWater(map, width, height);
 }
 
-void drawTerrain(int width, int height){
+void drawTerrain(){
   int **map;
+  int height = getBoardMaxHeight()+2;
+  int width = getBoardMaxWidth()+2;
 
   map = (int **) malloc(height * sizeof(int*));
   for(int i = 0; i < height; i++){

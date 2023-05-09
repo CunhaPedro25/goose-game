@@ -14,19 +14,20 @@ void drawPlayer(int id, int tile) {
     int x, y;
     int oldTile = players[id - 1].currentTile;
 
-    // get position of old tile
-    getGameTilePosition(oldTile, &x, &y);
+    if(players[id - 1].currentTile != 0){
+        // get position of old tile
+        getGameTilePosition(oldTile, &x, &y);
 
-    // calculate coordinates of old player position
-    int old_player_x = x * 6 + players[id - 1].id + 1;
-    int old_player_y = y * 3 + 1 + 1;
+        // calculate coordinates of old player position
+        int old_player_x = x * 6 + players[id - 1].id + 1;
+        int old_player_y = y * 3 + 1 + 1;
 
-    // clear old player position
-    moveCursor(old_player_x, old_player_y);
-    setBackgroundColor(getGameTileType(oldTile), 0);
-    printf(" ");
-    resetColor();
-
+        // clear old player position
+        moveCursor(old_player_x, old_player_y);
+        setBackgroundColor(getGameTileType(oldTile), 0);
+        printf(" ");
+        resetColor();
+    }
 
     // update player's current tile
     players[id - 1].currentTile = tile;

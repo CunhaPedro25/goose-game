@@ -19,5 +19,7 @@ void drawBoard();
 void getGameTilePosition(int tileNumber, int* x, int* y);
 int getGameTileType(int tileNumber);
 int getEndTilePosition(int *x, int *y);
+int getBoardMaxHeight();
+int getBoardMaxWidth();
 
 #endif
