@@ -14,8 +14,10 @@ int main(){
   }
 
   int selection;
+
+  int cursorYposition = (getBoardMaxHeight()+3) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
   do{
-    moveCursor(0,getBoardMaxHeight()+2);
+    moveCursor(0,cursorYposition);
     printf("Select Tile >");
     drawPlayer(RED, selection = getNumber());
   }while(selection != 0);

@@ -55,23 +55,27 @@ int getGameTileType(int tileNumber) {
 }
 
 int getBoardMaxHeight(){
-  int height;
+  int height = 0;
 
   for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
     if (gameTiles[i].y > height) {
         height = gameTiles[i].y;
     }
-  } 
+  }
+
+  return height;
 }
 
 int getBoardMaxWidth(){
-  int width;
+  int width = 0;
   
   for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
     if (gameTiles[i].x > width) {
         width = gameTiles[i].x;
     }
-  } 
+  }
+
+  return width;
 }
 
 int getEndTilePosition(int *x, int *y){
