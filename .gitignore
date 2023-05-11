@@ -48,6 +48,9 @@
 *.x86_64
 *.hex
 
+#Binary files
+*.dat
+
 # Debug files
 *.dSYM/
 *.su
@@ -63,6 +66,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+#Cmake
 /src/cmake-build-debug
 
 #IDE
