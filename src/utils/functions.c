@@ -1,5 +1,4 @@
 #include "functions.h"
-#include <stdio.h>
 
 int getNumber(){
   int selection = 0;

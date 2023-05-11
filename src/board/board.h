@@ -1,6 +1,8 @@
 #ifndef TILES_H
 #define TILES_H
 
+#include <stdio.h>
+
 typedef enum{
   BOOL = 3,
   END = 4,

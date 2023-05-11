@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "board.h"
 #include "../utils/ui.h"
 #include "terrain.h"
