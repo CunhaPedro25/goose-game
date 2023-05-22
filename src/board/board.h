@@ -23,5 +23,6 @@ int getGameTileType(int tileNumber);
 int getEndTilePosition(int *x, int *y);
 int getBoardMaxHeight();
 int getBoardMaxWidth();
+int getBoardLength();
 
 #endif

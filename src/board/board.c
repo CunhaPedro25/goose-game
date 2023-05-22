@@ -4,21 +4,21 @@
 
 GameTile gameTiles[] = {
   {1, 1, BOOL},
-  {2, 1, MULTIPLE},        
+  {2, 1, MULTIPLE},
   {3, 1, WRITTEN},
   {4, 1, BOOL},
-  {5, 1, MULTIPLE},        
+  {5, 1, MULTIPLE},
   {6, 1, WRITTEN},
 
   {6, 2, BOOL},
-  {6, 3, MULTIPLE},        
+  {6, 3, MULTIPLE},
   {6, 4, WRITTEN},
   {6, 5, BOOL},
-  {6, 6, MULTIPLE},        
+  {6, 6, MULTIPLE},
   {6, 7, WRITTEN},
 
   {5, 7, BOOL},
-  {4, 7, MULTIPLE},        
+  {4, 7, MULTIPLE},
   {3, 7, WRITTEN},
   {2, 7, BOOL},
   {1, 7, MULTIPLE},
@@ -67,7 +67,7 @@ int getBoardMaxHeight(){
 
 int getBoardMaxWidth(){
   int width = 0;
-  
+
   for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
     if (gameTiles[i].x > width) {
         width = gameTiles[i].x;
@@ -86,6 +86,9 @@ int getEndTilePosition(int *x, int *y){
   return endTile;
 }
 
+int getBoardLength(){
+  return sizeof(gameTiles)/sizeof(GameTile);
+}
 
 void drawGameTile(int number) {
   int new_x = gameTiles[number].x * 6 + 1;

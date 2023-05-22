@@ -28,7 +28,7 @@ bool createBoolQuestionsFile(){
   fwrite(&numBoolQuestions, sizeof(int), 1, file);
 
   fclose(file);
-  
+
   return true;
 }
 
@@ -116,7 +116,7 @@ bool storeRandomizeBoolQuestions(){
     return true;
 }
 
-void freeBoolQuestionList() {
+void freeBoolQuestionList(){
   while (head != NULL) {
     BoolNode* next = head->next;
     free(head);
@@ -135,7 +135,7 @@ BoolQuestion* getQuestion(){
     BoolQuestion* question = (BoolQuestion*)malloc(sizeof(BoolQuestion));
     question->answer = head->data.answer;
     strcpy(question->question, head->data.question);
-    
+
     // Remove the first element of the list
     BoolNode* temp = head;
     head = head->next;

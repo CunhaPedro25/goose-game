@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "board/board.h"
+#include "game/game.h"
 #include "player/player.h"
 #include "questions/questions.h"
 #include "utils/ui.h"
@@ -12,28 +13,37 @@
 int main(){
   clearConsole();
 
-  addNewBoolQuestion("Question 1", false);
-  addNewBoolQuestion("Question 2", true);
-  addNewBoolQuestion("Question 3", false);
-  addNewBoolQuestion("Question 4", false);
-  addNewBoolQuestion("Question 5", true);
+  // addNewBoolQuestion("False?", false);
+  // addNewBoolQuestion("True?", true);
+  // addNewBoolQuestion("False?", false);
+  // addNewBoolQuestion("False?", false);
+  // addNewBoolQuestion("True?", true);
 
-  storeRandomizeBoolQuestions();
-  int numQuestions = getNumberBoolQuestions();
+  // storeRandomizeBoolQuestions();
+  // int numQuestions = getNumberBoolQuestions();
 
-  // Print the linked list
-  printf("Questions:\n");
-  for(int i = 0; i < numQuestions; i++){
-      BoolQuestion* question = getQuestion();
-      printf("%s %d\n", question->question, question->answer);
-      free(question);
-  }
+  // // Print the linked list
+  // printf("Questions:\n");
+  // for(int i = 0; i < numQuestions; i++){
+  //     BoolQuestion* question = getQuestion();
+  //     int answer;
+  //     printf("%s\n", question->question);
 
-  getchar();
-  clearConsole();
+  //     scanf("%d", &answer);
+  //     if(answer == question->answer){
+  //       printf("Correct!\n");
+  //     }else{
+  //       printf("Wrong!\n");
+  //     }
 
-  return 0;
+  //     free(question);
+  // }
 
+  // getchar();
+  // getchar();
+  // getchar();
+
+  // return 0;
 
   // int selection;
 
@@ -44,7 +54,9 @@ int main(){
   //   drawPlayer(RED, selection = getNumber());
   // }while(selection != 0);
 
-  // clearConsole();
+  gameLoop(2);
 
-  // return 0;
+  clearConsole();
+
+  return 0;
 }

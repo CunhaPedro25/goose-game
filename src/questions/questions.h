@@ -23,6 +23,7 @@ int getNumberBoolQuestions();
 bool addNewBoolQuestion(char question[500], bool answer);
 
 bool storeRandomizeBoolQuestions();
+void freeBoolQuestionList();
 BoolQuestion* getQuestion();
 
 /* Questions with Multiple choice answers (4 options) */
