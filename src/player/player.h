@@ -8,10 +8,13 @@
 
 typedef struct player {
   int id;
+  char name[100];
   int currentTile;
 } Player;
 
+char *getPlayerName(int id);
 int playerCurrentTile(int id);
+
 void drawPlayer(int id, int tile);
 
 #endif

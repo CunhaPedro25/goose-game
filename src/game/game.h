@@ -8,10 +8,11 @@
 #include <time.h>
 
 #include "../utils/ui.h"
+#include "../utils/functions.h"
 #include "../board/board.h"
 #include "../questions/questions.h"
 #include "../player/player.h"
 
-void gameLoop(int numPlayers);
+void gameLoop();
 
 #endif

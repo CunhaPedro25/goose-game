@@ -54,7 +54,7 @@ int main(){
   //   drawPlayer(RED, selection = getNumber());
   // }while(selection != 0);
 
-  gameLoop(2);
+  gameLoop();
 
   clearConsole();
 

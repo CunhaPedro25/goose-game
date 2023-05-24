@@ -2,11 +2,15 @@
 #include "player.h"
 
 Player players[4] = {
-    { RED, 0 },
-    { GREEN, 0 },
-    { YELLOW, 0 },
-    { BLUE, 0 },
+    { RED, "Ronaldo", 0},
+    { GREEN, "Pepe", 0 },
+    { YELLOW, "Messi", 0},
+    { BLUE, "Mono", 0 },
 };
+
+char *getPlayerName(int id){
+    return players[id-1].name;
+}
 
 int playerCurrentTile(int id){
     return players[id - 1].currentTile;
