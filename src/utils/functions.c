@@ -83,3 +83,9 @@ bool getNumberFromRange(int *answer, int min, int max){
 
     return true;
 }
+
+void waitInput(char *message){
+    clearToScreenEnd();
+    printf("%s", message);
+    getchar();
+}

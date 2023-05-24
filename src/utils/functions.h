@@ -21,4 +21,6 @@ bool getString(char *string, int maxInputSize);
 bool getNumber(int *number, int maxInputSize);
 bool getNumberFromRange(int *answer, int min, int max);
 
+void waitInput(char *message);
+
 #endif /* FUNCTIONS_H */
