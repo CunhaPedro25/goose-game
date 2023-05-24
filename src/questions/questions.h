@@ -24,7 +24,9 @@ bool addNewBoolQuestion(char question[500], bool answer);
 
 bool storeRandomizeBoolQuestions();
 void freeBoolQuestionList();
-BoolQuestion* getQuestion();
+BoolQuestion* getBoolQuestion();
+
+
 
 /* Questions with Multiple choice answers (4 options) */
 typedef struct multipleChoiceQuestion{
@@ -37,6 +39,8 @@ typedef struct multipleChoiceNode{
     MultipleChoiceQuestion data;
     struct multipleChoiceNode* next;
 }MultipleChoiceNode;
+
+
 
 
 /* Questions with a direct/written answer */

@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 typedef enum{
-  BOOL = 3,
   END = 4,
+  BOOL = 3,
   MULTIPLE = 5,
   WRITTEN = 6
 }gameTileType;

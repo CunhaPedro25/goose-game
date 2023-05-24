@@ -125,7 +125,7 @@ void freeBoolQuestionList(){
 }
 
 
-BoolQuestion* getQuestion(){
+BoolQuestion* getBoolQuestion(){
     if(head == NULL){
         printf("No more questions\n");
         return NULL;
