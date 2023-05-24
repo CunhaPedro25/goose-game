@@ -7,7 +7,7 @@
 #include "../board/board.h"
 
 typedef struct player {
-  int id;
+  int color;
   char name[100];
   int currentTile;
 } Player;

@@ -9,11 +9,11 @@ Player players[4] = {
 };
 
 char *getPlayerName(int id){
-    return players[id-1].name;
+    return players[id].name;
 }
 
 int playerCurrentTile(int id){
-    return players[id - 1].currentTile;
+    return players[id].currentTile;
 }
 
 void drawPlayer(int id, int tile) {
@@ -25,7 +25,7 @@ void drawPlayer(int id, int tile) {
         getGameTilePosition(oldTile, &x, &y);
 
         // calculate coordinates of old player position
-        int old_player_x = x * 6 + players[id - 1].id + 1;
+        int old_player_x = x * 6 + (id+1) + 1;
         int old_player_y = y * 3 + 1 + 1;
 
         // clear old player position
@@ -36,19 +36,19 @@ void drawPlayer(int id, int tile) {
     }
 
     // update player's current tile
-    players[id - 1].currentTile = tile;
+    players[id].currentTile = tile;
 
     // get position of new tile
     getGameTilePosition(tile, &x, &y);
 
     // calculate coordinates of new player position
-    int new_player_x = x * 6 + id + 1;
+    int new_player_x = x * 6 + (id+1) + 1;
     int new_player_y = y * 3 + 1 + 1;
 
     // draw player on new tile
     moveCursor(new_player_x, new_player_y);
-    setBackgroundColor(id, 1);
-    setTextColor(id, 0);
+    setBackgroundColor(players[id].color, 1);
+    setTextColor(players[id].color, 0);
     printf("o");
     resetColor();
 }
