@@ -70,8 +70,9 @@ dkms.conf
 /src/cmake-build-debug
 
 #IDE
-/.idea
-/.vscode
+.idea/
+.vscode/
+cmake-*/
 
 # Default ignored files
 /shelf/
