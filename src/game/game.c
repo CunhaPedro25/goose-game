@@ -3,9 +3,9 @@
 int initializeGame(){
   int numPlayers;
 
-  printf("How many players are in the game? (Max: 4)\n");
+  printf("How many players are in the game? (Min: 2; Max: 4)\n");
   printf("> ");
-  getNumberFromRange(&numPlayers, 1, 4);
+  getNumberFromRange(&numPlayers, 2, 4);
 
   storeRandomizeBoolQuestions();
 
@@ -17,7 +17,7 @@ int initializeGame(){
   }
 }
 
-void firstRound(int *order, int numPlayers){
+void determinePlayerOrder(int *order, int numPlayers){
     int *dice = (int *) malloc(numPlayers * sizeof(int));
     if (dice == NULL) {
         // Error handling for memory allocation failure
@@ -38,64 +38,65 @@ void firstRound(int *order, int numPlayers){
     printf("DICE RESULTS!\n");
     resetColor();
     for(int id = 0; id < numPlayers; id++){
-        dice[id] = (rand() % 5)+1;
+        dice[id] = rand() % 6 +1;
         order[id] = id;
         printf("%s's dice: %d\n", getPlayerName(id), dice[id]);
     }
 
-    // Handle equal dice rolls
-    int temp;
-    int equalRollCount = 0;
-    int *equalRollPlayers = (int *) malloc(numPlayers * sizeof(int));
-    if (equalRollPlayers == NULL) {
-        // Error handling for memory allocation failure
-        printf("Error: Memory allocation failed for equalRollPlayers array.\n");
-        free(dice);
-        return;
-    }
+    // // Handle equal dice rolls
+    // int equalRollCount = 0;
+    // // Allocate the flag array to keep track of players already added
+    // int *playerAdded = (int *) calloc(numPlayers, sizeof(int));
+    // if (playerAdded == NULL) {
+    //     // Error handling for memory allocation failure
+    //     printf("Error: Memory allocation failed for playerAdded array.\n");
+    //     free(dice);
+    //     return;
+    // }
 
-    do {
-      equalRollCount = 0;
+    // do {
+    //   equalRollCount = 0;
 
-      for (int i = 0; i < numPlayers - 1; i++) {
-        if (dice[i] == dice[i + 1]) {
-          equalRollPlayers[equalRollCount] = order[i];
-          equalRollPlayers[equalRollCount + 1] = order[i + 1];
-          equalRollCount++;
-        }
-      }
+    //   for (int i = 0; i < numPlayers; i++) {
+    //     if(!playerAdded[i]){
+    //       for (int j = i + 1; j < numPlayers; j++) {
+    //         if (dice[i] == dice[j] && !playerAdded[j]) {
+    //           playerAdded[i] = 1;
+    //           playerAdded[j] = 1;
+    //           equalRollCount++;
+    //         }
+    //       }
+    //       if(equalRollCount == 0){
+    //         playerAdded[i] = 0;
+    //       }
+    //     }
+    //   }
 
-      if (equalRollCount > 0) {
-        setTextColor(RED, 0);
-        printf("\nEqual dice rolls!");
-        resetColor();
+    //   if (equalRollCount > 0) {
+    //     setTextColor(RED, 0);
+    //     printf("\nEqual dice rolls!");
+    //     resetColor();
 
-        waitInput("\nPress any key to rematch...");
+    //     waitInput("\nPress any key to rematch...");
 
-        moveCursor(0, cursorYposition);
-        clearToScreenEnd();
-        setTextColor(YELLOW, 0);
-        printf("DICE RESULTS!\n");
-        resetColor();
-        for (int i = 0; i < equalRollCount + 1; i++) {
-          dice[equalRollPlayers[i]] = (rand() % 5) + 1;
-          printf("%s's dice roll: %d\n", getPlayerName(equalRollPlayers[i]), dice[equalRollPlayers[i]]);
-        }
+    //     moveCursor(0, cursorYposition);
+    //     clearToScreenEnd();
+    //     setTextColor(YELLOW, 0);
+    //     printf("DICE RESULTS!\n");
+    //     resetColor();
+    //     for (int i = 0; i < numPlayers; i++) {
+    //       if(playerAdded[i]){
+    //         dice[i] = rand() % 6 + 1;
+    //         printf("%s's dice roll: %d\n", getPlayerName(i), dice[i]);
+    //       }
+    //     }
+    //   }
+    // } while (equalRollCount > 0);
 
-        // Sort the players with equal rolls based on their additional dice rolls
-        for (int i = 0; i < equalRollCount; i++) {
-          for (int j = 0; j < equalRollCount - i; j++) {
-            if (dice[equalRollPlayers[j]] < dice[equalRollPlayers[j + 1]]) {
-              temp = equalRollPlayers[j];
-              equalRollPlayers[j] = equalRollPlayers[j + 1];
-              equalRollPlayers[j + 1] = temp;
-            }
-          }
-        }
-      }
-    } while (equalRollCount > 0);
+    // free(playerAdded);
 
     // Sort the players based on their dice rolls
+    int temp;
     for (int i = 0; i < numPlayers - 1; i++) {
         for (int j = 0; j < numPlayers - i - 1; j++) {
             if (dice[j] < dice[j + 1]) {
@@ -119,7 +120,6 @@ void firstRound(int *order, int numPlayers){
 
     waitInput("\nPress any key to continue...");
 
-    free(equalRollPlayers);
     free(dice);
 }
 
@@ -130,20 +130,23 @@ void gameLoop(){
   char writtenAnswer[100];
   int cursorYposition = (getBoardMaxHeight()+3) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
   int numPlayers = initializeGame();
-  int *order = NULL;
+  int *order = (int *) malloc(numPlayers * sizeof(int));
+  if (order == NULL) {
+      // Error handling for memory allocation failure
+      printf("Error: Memory allocation failed for order array.\n");
+      return;
+  }
 
-  order = (int *) malloc(numPlayers * sizeof(int));
-
-  firstRound(order, numPlayers);
+  determinePlayerOrder(order, numPlayers);
 
   do{
     for(int id = 0; id < numPlayers; id++){
       moveCursor(0,cursorYposition);
       clearToScreenEnd();
       bool correct;
-      numberOfSpaces = (rand() % 5)+1;
+      numberOfSpaces = rand() % 6 + 1;
       // numberOfSpaces = 23;
-      printf("%s's turn | Points: %2d | Question Points: +%d\n", getPlayerName(id), playerCurrentTile(id)-1, numberOfSpaces);
+      printf("%s's turn | Points: %2d | Question Points: +%d\n", getPlayerName(order[id]), playerCurrentTile(order[id])-1, numberOfSpaces);
 
       BoolQuestion* question = getBoolQuestion();
       switch(getGameTileType(playerCurrentTile(id))){
@@ -179,22 +182,22 @@ void gameLoop(){
       if(correct){
         printf("Correct!\n");
         saveCursor();
-        if(playerCurrentTile(id) + numberOfSpaces < getBoardLength()){
-          drawPlayer(id, playerCurrentTile(id) + numberOfSpaces);
+        if(playerCurrentTile(order[id]) + numberOfSpaces < getBoardLength()){
+          drawPlayer(order[id], playerCurrentTile(order[id]) + numberOfSpaces);
         }else{
-          drawPlayer(id, getBoardLength());
+          drawPlayer(order[id], getBoardLength());
           gameover = true;
-          printf("%s WON!\n", getPlayerName(id));
-          printf("%d points", playerCurrentTile(id)-1);
+          printf("%s WON!\n", getPlayerName(order[id]));
+          printf("%d points", playerCurrentTile(order[id])-1);
           break;
         }
       }else{
         printf("Wrong!\n");
         saveCursor();
-        if(playerCurrentTile(id) - numberOfSpaces > 0){
-          drawPlayer(id, playerCurrentTile(id) - numberOfSpaces);
+        if(playerCurrentTile(order[id]) - numberOfSpaces > 0){
+          drawPlayer(order[id], playerCurrentTile(order[id]) - numberOfSpaces);
         }else{
-          drawPlayer(id, 1);
+          drawPlayer(order[id], 1);
         }
       }
 

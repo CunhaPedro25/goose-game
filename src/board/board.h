@@ -3,11 +3,14 @@
 
 #include <stdio.h>
 
+#include "../utils/functions.h"
+#include "../utils/ui.h"
+
 typedef enum{
-  END = 4,
-  BOOL = 3,
-  MULTIPLE = 5,
-  WRITTEN = 6
+  END = BLUE,
+  BOOL = YELLOW,
+  MULTIPLE = MAGENTA,
+  WRITTEN = CYAN
 }gameTileType;
 
 typedef struct gameTile {
