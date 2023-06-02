@@ -1,6 +1,4 @@
 #include "board.h"
-#include "../utils/ui.h"
-#include "terrain.h"
 
 GameTile gameTiles[] = {
   {1, 1, BOOL},
