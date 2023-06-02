@@ -13,37 +13,77 @@
 int main(){
   clearConsole();
 
-  // addNewBoolQuestion("False?", false);
-  // addNewBoolQuestion("True?", true);
-  // addNewBoolQuestion("False?", false);
-  // addNewBoolQuestion("False?", false);
-  // addNewBoolQuestion("True?", true);
+  // printf("%s", getBoolQuestion(2)->question);
 
-  // storeRandomizeBoolQuestions();
-  // int numQuestions = getNumberBoolQuestions();
+  Questions question = { "test", "test"};
 
-  // // Print the linked list
-  // printf("Questions:\n");
-  // for(int i = 0; i < numQuestions; i++){
-  //     BoolQuestion* question = getQuestion();
-  //     int answer;
-  //     printf("%s\n", question->question);
+  // addNewMultipleChoiceQuestion(question);
 
-  //     scanf("%d", &answer);
-  //     if(answer == question->answer){
-  //       printf("Correct!\n");
-  //     }else{
-  //       printf("Wrong!\n");
-  //     }
+  // int numQuestions = getNumberMultipleChoiceQuestions();
 
-  //     free(question);
+  // printf("%d\n", numQuestions);
+
+  // for(int i = 1; i <= numQuestions; i++){
+  //   Questions* getQuestion = getMultipleChoiceQuestion(i);
+  //   printf("%s\n", getQuestion->question);
+  //   printf("%s\n", getQuestion->answer);
+
+  //   for(int j = 0; j < 3; j++){
+  //     printf("%s\n", getQuestion->wrongAnswers[j]);
+  //   }
+  //   printf("\n");
   // }
 
-  // getchar();
-  // getchar();
-  // getchar();
+  for(int i = 0; i < 5; i++){
+    addNewBoolQuestion(question);
+  }
 
-  // return 0;
+  int numQuestions = getNumberBoolQuestions();
+
+  for(int i = 1; i <= numQuestions; i++){
+    Questions* getQuestion = getBoolQuestion(i);
+    printf("%s\n", getQuestion->question);
+    printf("%s\n\n", getQuestion->answer);
+  }
+
+  Questions newQuestion = { "not cool", "pog"};
+  editBoolQuestion(2, newQuestion);
+
+  printf("Edit\n");
+  for(int i = 1; i <= numQuestions; i++){
+    Questions* getQuestion = getBoolQuestion(i);
+    printf("%s\n", getQuestion->question);
+    printf("%s\n\n", getQuestion->answer);
+  }
+
+  deleteBoolQuestion(2);
+
+  numQuestions = getNumberBoolQuestions();
+
+  printf("Delete\n");
+  for(int i = 1; i <= numQuestions; i++){
+    Questions* getQuestion = getBoolQuestion(i);
+    printf("%s\n", getQuestion->question);
+    printf("%s\n\n", getQuestion->answer);
+  }
+
+  QuestionNode* boolQuestionList = NULL;
+
+  storeRandomizedBoolQuestions(boolQuestionList);
+
+  Questions* getQuestion = getQuestionFromList(boolQuestionList);
+  printf("%s\n", getQuestion->question);
+  printf("%s\n\n", getQuestion->answer);
+
+  freeQuestionList(boolQuestionList);
+
+
+  // addNewWrittenQuestion(question);
+  // Questions* getQuestion  = getWrittenQuestion(1);
+  // printf("%s\n", getQuestion->question);
+  // printf("%s\n", getQuestion->answer);
+
+  getchar();
 
   // int selection;
 
@@ -54,7 +94,7 @@ int main(){
   //   drawPlayer(RED, selection = getNumber());
   // }while(selection != 0);
 
-  gameLoop();
+  // gameLoop();
 
   clearConsole();
 

@@ -1,13 +1,14 @@
 #include "game.h"
 
-int initializeGame(){
+int initializeGame(QuestionNode* boolQuestionList, QuestionNode* multipleChoiceQuestionList){
   int numPlayers;
 
   printf("How many players are in the game? (Min: 2; Max: 4)\n");
   printf("> ");
   getNumberFromRange(&numPlayers, 2, 4);
 
-  storeRandomizeBoolQuestions();
+  storeRandomizeQuestions(boolQuestionList);
+  storeRandomizeQuestions(multipleChoiceQuestionList);
 
   clearConsole();
   drawBoard();
@@ -124,12 +125,19 @@ void determinePlayerOrder(int *order, int numPlayers){
 }
 
 void gameLoop(){
+  QuestionNode* boolQuestionList = NULL;
+  QuestionNode* multipleChoiceQuestionList = NULL;
+
   bool gameover = false;
   int numberOfSpaces = 0;
   int optionAnswer = 0;
   char writtenAnswer[100];
   int cursorYposition = (getBoardMaxHeight()+3) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
-  int numPlayers = initializeGame();
+  Questions* question = NULL;
+
+  // Call function to ask for numPlayers, create map, and draw players
+  int numPlayers = initializeGame(boolQuestionList, multipleChoiceQuestionList);
+
   int *order = (int *) malloc(numPlayers * sizeof(int));
   if (order == NULL) {
       // Error handling for memory allocation failure
@@ -143,40 +151,40 @@ void gameLoop(){
     for(int id = 0; id < numPlayers; id++){
       moveCursor(0,cursorYposition);
       clearToScreenEnd();
+
       bool correct;
       numberOfSpaces = rand() % 6 + 1;
-      // numberOfSpaces = 23;
-      printf("%s's turn | Points: %2d | Question Points: +%d\n", getPlayerName(order[id]), playerCurrentTile(order[id])-1, numberOfSpaces);
 
-      BoolQuestion* question = getBoolQuestion();
+      printf("%s's turn | Points: %2d \n", getPlayerName(order[id]), playerCurrentTile(order[id])-1);
+      printf("Question Type: %d | Question Points: +%d\n", getGameTileType(playerCurrentTile(id)), numberOfSpaces);
+
       switch(getGameTileType(playerCurrentTile(id))){
         case BOOL:
-          //BoolQuestion* question = getBoolQuestion();
+            question = getRandomBoolQuestion(boolQuestionList);
 
-          printf("%s\n", question->question);
-          printf("1 - True\n2 - False\n");
+            printf("%s\n", question->question);
+            printf("1 - True\n2 - False\n");
 
-          getNumberFromRange(&optionAnswer, 1,2);
-          correct = optionAnswer == question->answer && question->answer == 1 ? true : optionAnswer != question->answer && optionAnswer != 1 && question->answer == 0 ? true : false;
+            getNumberFromRange(&optionAnswer, 1,2);
+            correct = verifyBoolQuestion(question->answer, optionAnswer);
           break;
         case MULTIPLE:
-          //MultipleChoiceQuestion* question = getMultipleChoiceQuestion();
+            question = getRandomMultipleChoiceQuestion(multipleChoiceQuestionList);
 
-            printf("%s\n", question->question);
-              printf("1 - True\n2 - False\n");
+            int correctIndex = getCorrectAnswerIndex(question->answer, question->wrongAnswers);
+            getNumberFromRange(&optionAnswer, 1,2);
 
-              getNumberFromRange(&optionAnswer, 1,2);
-              correct = optionAnswer == question->answer && question->answer == 1 ? true : optionAnswer != question->answer && optionAnswer != 1 && question->answer == 0 ? true : false;
-              break;
+            correct = (optionAnswer == correctIndex);
+          break;
         case WRITTEN:
-          //MultipleChoiceQuestion* question = getMultipleChoiceQuestion();
+            question = getRandomBoolQuestion(boolQuestionList);
 
             printf("%s\n", question->question);
-              printf("1 - True\n2 - False\n");
+            printf("1 - True\n2 - False\n");
 
-              getNumberFromRange(&optionAnswer, 1,2);
-              correct = optionAnswer == question->answer && question->answer == 1 ? true : optionAnswer != question->answer && optionAnswer != 1 && question->answer == 0 ? true : false;
-              break;
+            getNumberFromRange(&optionAnswer, 1,2);
+            correct = verifyBoolQuestion(question->answer, optionAnswer);
+          break;
       }
 
       if(correct){
@@ -201,8 +209,8 @@ void gameLoop(){
         }
       }
 
-        restoreCursor();
-        waitInput("Press any key to continue...");
+      restoreCursor();
+      waitInput("Press any key to continue...");
     }
 
   }while(!gameover);
@@ -210,5 +218,6 @@ void gameLoop(){
   moveCursor(0,cursorYposition);
   waitInput("Press any key to continue...");
 
-  freeBoolQuestionList();
+  freeQuestionList(boolQuestionList);
+  freeQuestionList(multipleChoiceQuestionList);
 }

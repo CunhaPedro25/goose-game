@@ -7,52 +7,68 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-/* Questions with true or false answers */
-typedef struct boolQuestion{
+typedef struct question{
   char question[500];
-  bool answer;
-}BoolQuestion;
+  char answer[100];
+  char wrongAnswers[3][100];
+}Questions;
 
-typedef struct boolNode{
-    BoolQuestion data;
-    struct boolNode* next;
-}BoolNode;
+typedef struct questionNode{
+    Questions data;
+    struct questionNode* next;
+}QuestionNode;
 
+
+void insertAtHead(QuestionNode* head, Questions *data);
+void freeQuestionList(QuestionNode* head);
+
+int getNumberQuestions(char *filepath);
+bool createQuestionFile(char *filePath);
+bool editQuestionFile(char *filePath, Questions question, int line);
+bool deleteQuestionFromFile(char *filePath, int line);
+bool addToQuestionFile(char *filePath, Questions question);
+Questions* getQuestion(char *filePath, int line);
+
+bool storeRandomizedQuestions(char *filepath, QuestionNode* head);
+Questions* getQuestionFromList(QuestionNode* head);
+
+
+/* Questions with True or False answers */
 int getNumberBoolQuestions();
-bool addNewBoolQuestion(char question[500], bool answer);
+bool editBoolQuestion(int line, Questions newQuestion);
+bool deleteBoolQuestion(int line);
+bool addNewBoolQuestion(Questions newQuestion);
+Questions* getBoolQuestion(int line);
 
-bool storeRandomizeBoolQuestions();
-void freeBoolQuestionList();
-BoolQuestion* getBoolQuestion();
-
+// Game functions for bool questions
+bool verifyBoolQuestion(char *correctAnswer, int userAnswer);
+bool storeRandomizedBoolQuestions(QuestionNode* head);
+/*----------------*/
 
 
 /* Questions with Multiple choice answers (4 options) */
-typedef struct multipleChoiceQuestion{
-  char question[500];
-  char correctAnswer[100];
-  char wrongAnswers[3][100];
-}MultipleChoiceQuestion;
+int getNumberMultipleChoiceQuestions();
+bool editMultipleChoiceQuestion(int line, Questions newQuestion);
+bool deleteMultipleChoiceQuestion(int line);
+bool addNewMultipleChoiceQuestion(Questions newQuestion);
+Questions* getMultipleChoiceQuestion(int line);
 
-typedef struct multipleChoiceNode{
-    MultipleChoiceQuestion data;
-    struct multipleChoiceNode* next;
-}MultipleChoiceNode;
-
-
+// Game functions for multiple choice questions
+int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]);
+bool storeRandomizedMultipleChoiceQuestions(QuestionNode* head);
+/*----------------*/
 
 
-/* Questions with a direct/written answer */
-typedef struct writtenQuestion{
-  char question[500];
-  char answer[100];
-}WrittenQuestion;
+/* Questions with Written answers */
+int getNumberWrittenQuestions();
+bool editWrittenQuestion(int line, Questions newQuestion);
+bool deleteWrittenQuestion(int line);
+bool addNewWrittenQuestion(Questions newQuestion);
+Questions* getWrittenQuestion(int line);
 
-typedef struct writtenNode{
-    WrittenQuestion data;
-    struct writtenNode* next;
-}WrittenNode;
-
+// Game functions for bool questions
+bool verifyWrittenQuestion(char correctAnswer[100], char userAnswer[100]);
+bool storeRandomizedWrittenQuestions(QuestionNode* head);
+/*----------------*/
 
 #endif
