@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 
+#include "terrain.h"
 #include "../utils/functions.h"
 #include "../utils/ui.h"
 
