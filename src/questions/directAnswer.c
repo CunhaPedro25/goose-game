@@ -16,15 +16,11 @@ bool addNewWrittenQuestion(Questions newQuestion){
   return addToQuestionFile("writtenQuestions.dat", newQuestion);
 }
 
-Questions* getWrittenQuestion(int line){
-  return getQuestion("writtenQuestions.dat", line);
+bool getWrittenQuestion(Questions* question, int line){
+  return getQuestion("writtenQuestions.dat", question, line);
 }
 
 /* Functions used for Game */
-bool verifyWrittenQuestion(char correctAnswer[100], char userAnswer[100]){
-  return strcasecmp(correctAnswer, userAnswer);
-}
-
-bool storeRandomizedWrittenQuestions(QuestionNode* head){
+bool storeRandomizedWrittenQuestions(QuestionNode** head){
   return storeRandomizedQuestions("writtenQuestions.dat", head);
 }

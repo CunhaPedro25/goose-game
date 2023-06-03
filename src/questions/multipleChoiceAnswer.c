@@ -16,8 +16,8 @@ bool addNewMultipleChoiceQuestion(Questions newQuestion){
   return addToQuestionFile("multipleChoiceQuestions.dat", newQuestion);
 }
 
-Questions* getMultipleChoiceQuestion(int line){
-  return getQuestion("multipleChoiceQuestions.dat", line);
+bool getMultipleChoiceQuestion(Questions* question, int line){
+  return getQuestion("multipleChoiceQuestions.dat", question, line);
 }
 
 
@@ -51,13 +51,12 @@ int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]){
       printf("%d - %s\n", i + 1, answers[i]);
       if (strcmp(answers[i], correctAnswer) == 0) {
           correctIndex = i + 1;
-          break;
       }
   }
 
   return correctIndex;
 }
 
-bool storeRandomizedMultipleChoiceQuestions(QuestionNode* head){
+bool storeRandomizedMultipleChoiceQuestions(QuestionNode** head){
   return storeRandomizedQuestions("MultipleChoiceQuestions.dat", head);
 }

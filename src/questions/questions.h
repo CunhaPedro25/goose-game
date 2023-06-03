@@ -18,19 +18,18 @@ typedef struct questionNode{
     struct questionNode* next;
 }QuestionNode;
 
-
-void insertAtHead(QuestionNode* head, Questions *data);
 void freeQuestionList(QuestionNode* head);
+void installQuestionFiles();
 
 int getNumberQuestions(char *filepath);
 bool createQuestionFile(char *filePath);
 bool editQuestionFile(char *filePath, Questions question, int line);
 bool deleteQuestionFromFile(char *filePath, int line);
 bool addToQuestionFile(char *filePath, Questions question);
-Questions* getQuestion(char *filePath, int line);
+bool getQuestion(char *filePath, Questions* question, int line);
 
-bool storeRandomizedQuestions(char *filepath, QuestionNode* head);
-Questions* getQuestionFromList(QuestionNode* head);
+bool storeRandomizedQuestions(char *filepath, QuestionNode** head);
+bool getQuestionFromList(QuestionNode** head, Questions* question);
 
 
 /* Questions with True or False answers */
@@ -38,11 +37,11 @@ int getNumberBoolQuestions();
 bool editBoolQuestion(int line, Questions newQuestion);
 bool deleteBoolQuestion(int line);
 bool addNewBoolQuestion(Questions newQuestion);
-Questions* getBoolQuestion(int line);
+bool getBoolQuestion(Questions* question, int line);
 
 // Game functions for bool questions
 bool verifyBoolQuestion(char *correctAnswer, int userAnswer);
-bool storeRandomizedBoolQuestions(QuestionNode* head);
+bool storeRandomizedBoolQuestions(QuestionNode** head);
 /*----------------*/
 
 
@@ -51,11 +50,11 @@ int getNumberMultipleChoiceQuestions();
 bool editMultipleChoiceQuestion(int line, Questions newQuestion);
 bool deleteMultipleChoiceQuestion(int line);
 bool addNewMultipleChoiceQuestion(Questions newQuestion);
-Questions* getMultipleChoiceQuestion(int line);
+bool getMultipleChoiceQuestion(Questions* question, int line);
 
 // Game functions for multiple choice questions
 int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]);
-bool storeRandomizedMultipleChoiceQuestions(QuestionNode* head);
+bool storeRandomizedMultipleChoiceQuestions(QuestionNode** head);
 /*----------------*/
 
 
@@ -64,11 +63,10 @@ int getNumberWrittenQuestions();
 bool editWrittenQuestion(int line, Questions newQuestion);
 bool deleteWrittenQuestion(int line);
 bool addNewWrittenQuestion(Questions newQuestion);
-Questions* getWrittenQuestion(int line);
+bool getWrittenQuestion(Questions* question, int line);
 
 // Game functions for bool questions
-bool verifyWrittenQuestion(char correctAnswer[100], char userAnswer[100]);
-bool storeRandomizedWrittenQuestions(QuestionNode* head);
+bool storeRandomizedWrittenQuestions(QuestionNode** head);
 /*----------------*/
 
 #endif
