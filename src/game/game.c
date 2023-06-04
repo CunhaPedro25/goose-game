@@ -160,6 +160,7 @@ void gameLoop(){
               printf("%s\n", question.question);
               printf("1 - True\n2 - False\n");
 
+              printf("\n> ");
               getNumberFromRange(&optionAnswer, 1,2);
               correct = verifyBoolQuestion(question.answer, optionAnswer);
             }else{
@@ -218,7 +219,7 @@ void gameLoop(){
 
 
       if(correct){
-        printf("Correct!\n");
+        printf("Correct!\n\n");
         saveCursor();
         if(playerCurrentTile(order[id]) + numberOfSpaces < getBoardLength()){
           drawPlayer(order[id], playerCurrentTile(order[id]) + numberOfSpaces);
