@@ -25,3 +25,20 @@ void clearLine() { printf(prefix "2K"); }
 void setTextColor(int color, int bright){ printf(prefix "%dm", (bright ? 90 : 30) + color); }
 void setBackgroundColor(int color, int bright){ printf(prefix "%dm", (bright ? 100 : 40) + color); }
 void resetColor(){ printf(prefix "0m"); }
+
+
+void closedLine(int size) {
+  for (int i = 0; i < size-2; ++i) {
+    printf("-");
+  }
+
+  printf("\n");
+}
+
+void renderTitle(const char *title) {
+  int titleSize = (int)(strlen_utf8(title) + strlen("/*--  --*/"));
+
+  closedLine(titleSize);
+  printf("/*--%s--*/\n", title);
+  closedLine(titleSize);
+}

@@ -2,6 +2,9 @@
 #define UI_H
 
 #include <stdio.h>
+#include <string.h>
+
+#include "functions.h"
 
 #define prefix "\e["
 
@@ -34,5 +37,7 @@ void clearLine();
 void setTextColor(int color, int bright);
 void setBackgroundColor(int color, int bright);
 void resetColor();
+
+void renderTitle(const char *title);
 
 #endif /* UI_H */
