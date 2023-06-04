@@ -8,7 +8,7 @@
     #define PLATFORM_FOLDER "gooseGame\\questions\\"
 #elif __linux__
     #define PLATFORM_PATH_ENV "HOME"
-    #define PLATFORM_FOLDER "gooseGame/questions/"
+    #define PLATFORM_FOLDER ".gooseGame/questions/"
 #elif __APPLE__
     #define PLATFORM_PATH_ENV "HOME"
     #define PLATFORM_FOLDER "Applications/gooseGame/questions/"
@@ -31,7 +31,7 @@ void freeQuestionList(QuestionNode* head){
 
 int getNumberQuestions(char *filePath){
   char platformPath[FILE_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
@@ -51,7 +51,7 @@ int getNumberQuestions(char *filePath){
 
 bool editQuestionFile(char *filePath, Questions question, int line){
   char platformPath[FILE_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
@@ -75,7 +75,7 @@ bool editQuestionFile(char *filePath, Questions question, int line){
 
 bool deleteQuestionFromFile(char *filePath, int line){
   char platformPath[FILE_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
@@ -116,7 +116,7 @@ bool deleteQuestionFromFile(char *filePath, int line){
 
 bool addToQuestionFile(char *filePath, Questions question){
   char platformPath[FILE_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
@@ -143,7 +143,7 @@ bool addToQuestionFile(char *filePath, Questions question){
 
 bool getQuestion(char *filePath, Questions* question, int line){
   char platformPath[FILE_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
@@ -169,6 +169,7 @@ bool getQuestion(char *filePath, Questions* question, int line){
 bool storeRandomizedQuestions(char *filePath, QuestionNode** head){
   int numQuestions = getNumberQuestions(filePath);
   if(numQuestions == -1){
+    printf("No questions");
     return false;
   }
 
@@ -202,6 +203,7 @@ bool storeRandomizedQuestions(char *filePath, QuestionNode** head){
 
 bool getQuestionFromList(QuestionNode** head, Questions* question){
     if(head == NULL || *head == NULL){
+      printf("List is empty");
       return false;
     }
 
@@ -218,27 +220,24 @@ bool getQuestionFromList(QuestionNode** head, Questions* question){
 
 void installQuestionFiles(){
   char platformPath[FILE_PATH_LENGTH], fullPath[EXTRA_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
-  if (!createFolder(platformPath)) {
-    printf("Error creating folder: %s\n", platformPath);
-  }
+  FILE *boolQuestionsFile, *multipleChoiceQuestionsFile, *writtenQuestionsFile;
 
-  FILE *boolQuestions, *multipleChoiceQuestions, *writtenQuestions;
+  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "boolQuestions.dat");
 
-  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "/boolQuestions.dat");
-  boolQuestions = fopen(fullPath, "rb");
-  if (boolQuestions == NULL) {
-      boolQuestions = fopen(fullPath, "wb");
-      if (boolQuestions == NULL) {
+    boolQuestionsFile = fopen(fullPath, "rb");
+  if (boolQuestionsFile == NULL) {
+      boolQuestionsFile = fopen(fullPath, "wb");
+      if (boolQuestionsFile == NULL) {
           printf("Error creating boolQuestions.dat file.\n");
           return;
       }
 
       int numQuestions = 0;
-      fseek(boolQuestions, 0, SEEK_SET);
-      fwrite(&numQuestions, sizeof(int), 1, boolQuestions);
-      fclose(boolQuestions);
+      fseek(boolQuestionsFile, 0, SEEK_SET);
+      fwrite(&numQuestions, sizeof(int), 1, boolQuestionsFile);
+      fclose(boolQuestionsFile);
 
       Questions boolQuestions[] = {
         { "Is the Earth round?", "True"},
@@ -449,24 +448,23 @@ void installQuestionFiles(){
         { "Is the color purple considered a warm color?", "False"}
       };
 
-
       for (int i = 0; i < sizeof(boolQuestions) / sizeof(boolQuestions[0]); i++) {
         addNewBoolQuestion(boolQuestions[i]);
       }
   }
 
-  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "/multipleChoiceQuestions.dat");
-  multipleChoiceQuestions = fopen(fullPath, "rb");
-  if (multipleChoiceQuestions == NULL) {
-      multipleChoiceQuestions = fopen(fullPath, "wb");
-      if (multipleChoiceQuestions == NULL) {
+  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "multipleChoiceQuestions.dat");
+    multipleChoiceQuestionsFile = fopen(fullPath, "rb");
+  if (multipleChoiceQuestionsFile == NULL) {
+      multipleChoiceQuestionsFile = fopen(fullPath, "wb");
+      if (multipleChoiceQuestionsFile == NULL) {
           printf("Error creating multipleChoiceQuestions.dat file.\n");
           return;
       }
 
       int numQuestions = 0;
-      fwrite(&numQuestions, sizeof(int), 1, multipleChoiceQuestions);
-      fclose(multipleChoiceQuestions);
+      fwrite(&numQuestions, sizeof(int), 1, multipleChoiceQuestionsFile);
+      fclose(multipleChoiceQuestionsFile);
 
       Questions multipleChoiceQuestions[] = {
         { "What is the largest country by land area?",
@@ -551,7 +549,7 @@ void installQuestionFiles(){
         },
         { "Who painted the 'Starry Night'?",
           "Vincent van Gogh",
-          { "Pablo Picasso", "Salvador Dalí", "Claude Monet" }
+          { "Pablo Picasso", "Salvador Dali", "Claude Monet" }
         },
         { "What is the highest mountain in the world?",
           "Mount Everest",
@@ -559,7 +557,7 @@ void installQuestionFiles(){
         },
         { "Who is the author of 'Pride and Prejudice'?",
           "Jane Austen",
-          { "Charlotte Brontë", "Emily Brontë", "Virginia Woolf" }
+          { "Charlotte Bronte", "Emily Bronte", "Virginia Woolf" }
         },
         { "Which country is known for the Colosseum?",
           "Italy",
@@ -622,7 +620,7 @@ void installQuestionFiles(){
           { "Japan", "South Korea", "India" }
         },
         { "Who painted the 'The Persistence of Memory'?",
-          "Salvador Dalí",
+          "Salvador Dali",
           { "Pablo Picasso", "Vincent van Gogh", "Claude Monet" }
         },
         { "What is the highest waterfall in the United States?",
@@ -663,7 +661,7 @@ void installQuestionFiles(){
         },
         { "Who painted the 'Water Lilies'?",
           "Claude Monet",
-          { "Pablo Picasso", "Salvador Dalí", "Vincent van Gogh" }
+          { "Pablo Picasso", "Salvador Dali", "Vincent van Gogh" }
         },
         { "What is the tallest mountain in North America?",
           "Denali",
@@ -683,7 +681,7 @@ void installQuestionFiles(){
         },
         { "Who painted the 'The Starry Night'?",
           "Vincent van Gogh",
-          { "Pablo Picasso", "Salvador Dalí", "Claude Monet" }
+          { "Pablo Picasso", "Salvador Dali", "Claude Monet" }
         },
         { "What is the largest bay in the world?",
           "Hudson Bay",
@@ -815,7 +813,7 @@ void installQuestionFiles(){
         },
         { "Who is the author of 'Pride and Prejudice'?",
           "Jane Austen",
-          { "Emily Brontë", "Charlotte Brontë", "Virginia Woolf" }
+          { "Emily Bronte", "Charlotte Bronte", "Virginia Woolf" }
         },
         { "Which country is known for the Taj Mahal?",
           "India",
@@ -853,18 +851,18 @@ void installQuestionFiles(){
   }
 
 
-  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "/writtenQuestions.dat");
-  writtenQuestions = fopen(fullPath, "rb");
-  if (writtenQuestions == NULL) {
-    writtenQuestions = fopen(fullPath, "wb");
-    if (writtenQuestions == NULL) {
+  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, "writtenQuestions.dat");
+    writtenQuestionsFile = fopen(fullPath, "rb");
+  if (writtenQuestionsFile == NULL) {
+      writtenQuestionsFile = fopen(fullPath, "wb");
+    if (writtenQuestionsFile == NULL) {
         printf("Error creating writtenQuestions.dat file.\n");
         return;
     }
 
     int numQuestions = 0;
-    fwrite(&numQuestions, sizeof(int), 1, writtenQuestions);
-    fclose(writtenQuestions);
+    fwrite(&numQuestions, sizeof(int), 1, writtenQuestionsFile);
+    fclose(writtenQuestionsFile);
 
     Questions directAnswerQuestions[] = {
       { "What is the capital of France?", "Paris" },
@@ -896,7 +894,7 @@ void installQuestionFiles(){
       { "What is the currency of Canada?", "Canadian dollar" },
       { "Who wrote the novel 'Crime and Punishment'?", "Fyodor Dostoevsky" },
       { "What is the capital of Italy?", "Rome" },
-      { "Who painted the 'The Persistence of Memory'?", "Salvador Dalí" },
+      { "Who painted the 'The Persistence of Memory'?", "Salvador Dali" },
       { "What is the currency of Mexico?", "Mexican peso" },
       { "Who composed the symphony 'Symphony No. 5 in C minor'?", "Ludwig van Beethoven" },
       { "What is the capital of Spain?", "Madrid" },
@@ -920,7 +918,7 @@ void installQuestionFiles(){
       { "What is the currency of South Korea?", "South Korean won" },
       { "Who wrote the play 'Romeo and Juliet'?", "William Shakespeare" },
       { "What is the chemical symbol for sodium?", "Na" },
-      { "Who composed the symphony 'Symphony No. 9 in E minor (From the New World)'?", "Antonín Dvořák" },
+      { "Who composed the symphony 'Symphony No. 9 in E minor (From the New World)'?", "Antonin Dvorak" },
       { "What is the capital of Egypt?", "Cairo" },
       { "Who painted the 'The Thinker'?", "Auguste Rodin" },
       { "What is the currency of Saudi Arabia?", "Saudi riyal" },
@@ -942,7 +940,7 @@ void installQuestionFiles(){
       { "What is the chemical symbol for potassium?", "K" },
       { "Who composed the symphony 'Symphony No. 3 in E-flat major (Eroica)'?", "Ludwig van Beethoven" },
       { "What is the capital of India?", "New Delhi" },
-      { "Who painted the 'The Persistence of Memory'?", "Salvador Dalí" },
+      { "Who painted the 'The Persistence of Memory'?", "Salvador Dali" },
       { "What is the currency of Canada?", "Canadian dollar" },
       { "Who is the author of the novel 'The Hobbit'?", "J.R.R. Tolkien" },
       { "What is the capital of France?", "Paris" },
@@ -951,7 +949,7 @@ void installQuestionFiles(){
       { "Who wrote the play 'King Lear'?", "William Shakespeare" },
       { "What is the chemical symbol for magnesium?", "Mg" },
       { "Who composed the symphony 'Symphony No. 5 in C-sharp minor (Adagietto)'?", "Gustav Mahler" },
-      { "What is the capital of Brazil?", "Brasília" },
+      { "What is the capital of Brazil?", "Brasilia" },
       { "Who painted the 'The Scream'?", "Edvard Munch" },
       { "What is the currency of United Kingdom?", "British pound" },
       { "Who is the author of the novel '1984'?", "George Orwell" },

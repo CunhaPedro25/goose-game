@@ -58,5 +58,5 @@ int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]){
 }
 
 bool storeRandomizedMultipleChoiceQuestions(QuestionNode** head){
-  return storeRandomizedQuestions("MultipleChoiceQuestions.dat", head);
+  return storeRandomizedQuestions("multipleChoiceQuestions.dat", head);
 }

@@ -11,8 +11,10 @@
     #include <windows.h>
 #elif __linux__
     #include <sys/stat.h>
+    #include<unistd.h>
 #elif __APPLE__
     #include <sys/stat.h>
+    #include<unistd.h>
 #endif
 
 #include "../utils/functions.h"

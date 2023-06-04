@@ -21,7 +21,7 @@
 #include "ui.h"
 #include "../questions/questions.h"
 
-void getPlatformFilePath(char* platformPath);
+void getPlatformFilePath(char* platformPath, char* platformEnv, char* platformFolder);
 int createFolder(const char* folderPath);
 void installGame();
 

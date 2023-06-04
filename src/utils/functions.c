@@ -14,15 +14,15 @@
     #define PLATFORM_FOLDER "Applications/gooseGame/"
 #endif
 
-void getPlatformFilePath(char* platformPath) {
+void getPlatformFilePath(char* platformPath, char* platformEnv, char* platformFolder) {
 #ifdef _WIN32
     // Windows
-    const char* appDataPath = getenv(PLATFORM_PATH_ENV);
-    sprintf(platformPath, "%s\\%s", appDataPath, PLATFORM_FOLDER);
+    const char* appDataPath = getenv(platformEnv);
+    sprintf(platformPath, "%s\\%s", appDataPath, platformFolder);
 #elif __linux__ || __APPLE__
     // Linux and macOS
-    const char* homePath = getenv(PLATFORM_PATH_ENV);
-    sprintf(platformPath, "%s/%s", homePath, PLATFORM_FOLDER);
+    const char* homePath = getenv(platformEnv);
+    sprintf(platformPath, "%s/%s", homePath, platformFolder);
 #endif
 }
 
@@ -63,10 +63,18 @@ int createFolder(const char* folderPath) {
 
 void installGame(){
   char platformPath[FILE_PATH_LENGTH], fullPath[EXTRA_PATH_LENGTH];
-  getPlatformFilePath(platformPath);
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
   if (!createFolder(platformPath)) {
     printf("Error creating folder: %s\n", platformPath);
+    return;
+  }
+
+  // Create the question folder inside the platform folder
+  snprintf(fullPath, sizeof(fullPath), "%s%s", platformPath, "questions/");
+  if (!createFolder(fullPath)) {
+    printf("Error creating folder: %s\n", fullPath);
+    return;
   }
 
   installQuestionFiles();
