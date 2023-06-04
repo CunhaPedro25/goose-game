@@ -80,8 +80,8 @@ bool deleteQuestionFromFile(char *filePath, int line){
   char fullPath[FILE_PATH_LENGTH];
   sprintf(fullPath, "%s%s", platformPath, filePath);
 
-  char tempFullPath[FILE_PATH_LENGTH];
-  sprintf(fullPath, "%s%s", platformPath, filePath);
+  char tempFullPath[EXTRA_PATH_LENGTH];
+  sprintf(tempFullPath, "%s%s", platformPath, "/tempFile.dat");
 
   FILE *file, *tempFile;
 
@@ -98,7 +98,7 @@ bool deleteQuestionFromFile(char *filePath, int line){
 
   Questions question;
 
-  for(int i = 0; i < numQuestions; i++){
+  for(int i = 0; i <= numQuestions; i++){
     if(i != line-1){
       getQuestion(filePath, &question, i+1);
       fwrite(&question, sizeof(Questions), 1, tempFile);
