@@ -155,7 +155,7 @@ void gameLoop(){
       printf("Question Type: %d | Question Points: +%d\n\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
 
       switch(getGameTileType(playerCurrentTile(order[id]))){
-        case BOOL:
+        case TRUEFALSE:
             if(getQuestionFromList(&boolQuestionList, &question)){
               printf("%s\n", question.question);
               printf("1 - True\n2 - False\n");
@@ -244,7 +244,7 @@ void gameLoop(){
       }else{
         printf("Wrong!\n");
 
-        if(getGameTileType(playerCurrentTile(order[id])) != BOOL){
+        if(getGameTileType(playerCurrentTile(order[id])) != TRUEFALSE){
           printf("Correct Answer: %s\n\n", question.answer);
         }
         saveCursor();
