@@ -2,10 +2,54 @@
 
 int initializeGame(QuestionNode** boolQuestionList, QuestionNode** multipleChoiceQuestionList, QuestionNode** writtenQuestionList){
   int numPlayers;
+  char name[100];
+  int number;
 
+  clearConsole();
   printf("How many players are in the game? (Min: 2; Max: 4)\n");
   printf("> ");
   getNumberFromRange(&numPlayers, 2, 4);
+
+  createPlayers(numPlayers);
+
+  for(int i = 0; i < numPlayers; i++){
+    clearConsole();
+
+    printf("Player %d name\n", i+1);
+    printf("> ");
+    do{
+      saveCursor();
+      getString(name, 100);
+      savePlayerName(i, name);
+    }while(isNameTaken(name, i));
+
+
+    printf("\nPlayer color:\n");
+    if(!isColorTaken(RED, i)){
+      setTextColor(RED, 1);
+      printf("1 - RED\n");
+    }
+
+    if(!isColorTaken(GREEN, i)){
+      setTextColor(GREEN, 1);
+      printf("2 - GREEN\n");
+    }
+
+    if(!isColorTaken(YELLOW, i)){
+      setTextColor(YELLOW, 1);
+      printf("3 - YELLOW\n");
+    }
+
+    if(!isColorTaken(BLUE, i)){
+      setTextColor(BLUE, 1);
+      printf("4 - BLUE\n");
+    }
+
+    resetColor();
+    printf("> ");
+    getNumberFromRange(&number, 1,4);
+    savePlayerColor(i, number);
+  }
 
   storeRandomizedBoolQuestions(boolQuestionList);
   storeRandomizedMultipleChoiceQuestions(multipleChoiceQuestionList);
@@ -108,7 +152,7 @@ void gameLoop(){
       numberOfSpaces = rand() % 6 + 1;
 
       printf("%s's turn | Points: %2d \n", getPlayerName(order[id]), playerCurrentTile(order[id])-1);
-      printf("Question Type: %d | Question Points: +%d\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
+      printf("Question Type: %d | Question Points: +%d\n\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
 
       switch(getGameTileType(playerCurrentTile(order[id]))){
         case BOOL:
@@ -134,6 +178,8 @@ void gameLoop(){
               printf("Question: %s\n", question.question);
 
               int correctIndex = getCorrectAnswerIndex(question.answer, question.wrongAnswers);
+
+              printf("\n> ");
               getNumberFromRange(&optionAnswer, 1,4);
 
               correct = (optionAnswer == correctIndex);
@@ -152,6 +198,7 @@ void gameLoop(){
             if(getQuestionFromList(&writtenQuestionList, &question)){
               printf("%s\n", question.question);
 
+              printf("> ");
               getString(writtenAnswer, 100);
               correct = strcasecmp(question.answer, writtenAnswer) == 0;
             }else{
@@ -196,6 +243,10 @@ void gameLoop(){
         }
       }else{
         printf("Wrong!\n");
+
+        if(getGameTileType(playerCurrentTile(order[id])) != BOOL){
+          printf("Correct Answer: %s\n\n", question.answer);
+        }
         saveCursor();
         if(playerCurrentTile(order[id]) - numberOfSpaces > 0){
           drawPlayer(order[id], playerCurrentTile(order[id]) - numberOfSpaces);
