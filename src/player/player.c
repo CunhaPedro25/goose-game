@@ -1,47 +1,54 @@
 // in player.c
 #include "player.h"
-#include "../utils/ui.h"
-#include "../board/board.h"
 
 Player players[4] = {
-    { RED, 0 },
-    { GREEN, 0 },
-    { YELLOW, 0 },
-    { BLUE, 0 },
+    { RED, "Ronaldo", 0},
+    { GREEN, "Pepe", 0 },
+    { YELLOW, "Messi", 0},
+    { BLUE, "Mono", 0 },
 };
+
+char *getPlayerName(int id){
+    return players[id].name;
+}
+
+int playerCurrentTile(int id){
+    return players[id].currentTile;
+}
 
 void drawPlayer(int id, int tile) {
     int x, y;
-    int oldTile = players[id - 1].currentTile;
+    int oldTile = playerCurrentTile(id);
 
-    // get position of old tile
-    getGameTilePosition(oldTile, &x, &y);
+    if(oldTile != 0){
+        // get position of old tile
+        getGameTilePosition(oldTile, &x, &y);
 
-    // calculate coordinates of old player position
-    int old_player_x = x * 6 + players[id - 1].id + 1;
-    int old_player_y = y * 3 + 1 + 1;
+        // calculate coordinates of old player position
+        int old_player_x = x * 6 + (id+1) + 1;
+        int old_player_y = y * 3 + 1 + 1;
 
-    // clear old player position
-    moveCursor(old_player_x, old_player_y);
-    setBackgroundColor(getGameTileType(oldTile), 0);
-    printf(" ");
-    resetColor();
-
+        // clear old player position
+        moveCursor(old_player_x, old_player_y);
+        setBackgroundColor(getGameTileType(oldTile), 0);
+        printf(" ");
+        resetColor();
+    }
 
     // update player's current tile
-    players[id - 1].currentTile = tile;
+    players[id].currentTile = tile;
 
     // get position of new tile
     getGameTilePosition(tile, &x, &y);
 
     // calculate coordinates of new player position
-    int new_player_x = x * 6 + players[id - 1].id + 1;
+    int new_player_x = x * 6 + (id+1) + 1;
     int new_player_y = y * 3 + 1 + 1;
 
     // draw player on new tile
     moveCursor(new_player_x, new_player_y);
-    setBackgroundColor(id, 1);
-    setTextColor(id, 0);
+    setBackgroundColor(players[id].color, 1);
+    setTextColor(players[id].color, 0);
     printf("o");
     resetColor();
 }

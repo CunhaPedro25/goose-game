@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "board.h"
+#include "../utils/ui.h"
+
 enum terrain{
   NOTHING,
   LAVA,
@@ -13,6 +16,6 @@ enum terrain{
   WATER
 };
 
-void drawTerrain(int width, int height);
+void drawTerrain();
 
 #endif

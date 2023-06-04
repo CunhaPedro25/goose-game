@@ -1,11 +1,18 @@
 #ifndef TILES_H
 #define TILES_H
 
+#include <stdio.h>
+#include <math.h>
+
+#include "terrain.h"
+#include "../utils/functions.h"
+#include "../utils/ui.h"
+
 typedef enum{
-  BOOL = 3,
-  END = 4,
-  MULTIPLE = 5,
-  WRITTEN = 6
+  END = BLUE,
+  BOOL = YELLOW,
+  MULTIPLE = MAGENTA,
+  WRITTEN = CYAN
 }gameTileType;
 
 typedef struct gameTile {
@@ -19,5 +26,10 @@ void drawBoard();
 void getGameTilePosition(int tileNumber, int* x, int* y);
 int getGameTileType(int tileNumber);
 int getEndTilePosition(int *x, int *y);
+int getBoardMaxHeight();
+int getBoardMaxWidth();
+int getBoardLength();
+
+void writeOnBoardCenter(char* lines[], int numLines);
 
 #endif

@@ -1,30 +1,35 @@
-#include <stdio.h>
 #include "board.h"
-#include "../utils/ui.h"
-#include "terrain.h"
 
 GameTile gameTiles[] = {
-  {0, 0, BOOL},
-  {1, 0, MULTIPLE},        
-  {2, 0, WRITTEN},
-  {3, 0, BOOL},
-  {3, 1, MULTIPLE},
-  {3, 2, BOOL},
-  {3, 3, BOOL},
-  {4, 3, WRITTEN},
-  {5, 3, BOOL},
-  {6, 3, BOOL},
-  {7, 3, WRITTEN},
-  {8, 3, BOOL},
-  {9, 3, BOOL},
-  {10, 3, BOOL},
-  {10, 4, BOOL},
-  {10, 5, MULTIPLE},
-  {10, 6, BOOL},
-  {9, 6, MULTIPLE},
-  {8, 6, BOOL},
-  {7, 6, WRITTEN},
-  {6, 6, END}
+  {1, 1, BOOL},
+  {2, 1, MULTIPLE},
+  {3, 1, WRITTEN},
+  {4, 1, BOOL},
+  {5, 1, MULTIPLE},
+  {6, 1, WRITTEN},
+
+  {6, 2, BOOL},
+  {6, 3, MULTIPLE},
+  {6, 4, WRITTEN},
+  {6, 5, BOOL},
+  {6, 6, MULTIPLE},
+  {6, 7, WRITTEN},
+
+  {5, 7, BOOL},
+  {4, 7, MULTIPLE},
+  {3, 7, WRITTEN},
+  {2, 7, BOOL},
+  {1, 7, MULTIPLE},
+
+  {1, 6, WRITTEN},
+  {1, 5, BOOL},
+  {1, 4, WRITTEN},
+  {1, 3, MULTIPLE},
+
+  {2, 3, BOOL},
+  {3, 3, MULTIPLE},
+
+  {4, 3, END},
 };
 
 // get the position of a tile given its number
@@ -46,6 +51,30 @@ int getGameTileType(int tileNumber) {
   return gameTiles[tileNumber].type;
 }
 
+int getBoardMaxHeight(){
+  int height = 0;
+
+  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
+    if (gameTiles[i].y > height) {
+        height = gameTiles[i].y;
+    }
+  }
+
+  return height+1;  // +1 because terrain always has an extra tile
+}
+
+int getBoardMaxWidth(){
+  int width = 0;
+
+  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
+    if (gameTiles[i].x > width) {
+        width = gameTiles[i].x;
+    }
+  }
+
+  return width+1;
+}
+
 int getEndTilePosition(int *x, int *y){
   int endTile = (sizeof(gameTiles)/sizeof(GameTile))-1;
 
@@ -55,6 +84,9 @@ int getEndTilePosition(int *x, int *y){
   return endTile;
 }
 
+int getBoardLength(){
+  return sizeof(gameTiles)/sizeof(GameTile);
+}
 
 void drawGameTile(int number) {
   int new_x = gameTiles[number].x * 6 + 1;
@@ -75,21 +107,37 @@ void drawGameTile(int number) {
 }
 
 void drawBoard(){
-  int width = 0;
-  int height = 0;
-
-  for (int i = 0; i < sizeof(gameTiles)/sizeof(GameTile); i++) {
-    if (gameTiles[i].x > width) {
-        width = gameTiles[i].x;
-    }
-    if (gameTiles[i].y > height) {
-        height = gameTiles[i].y;
-    }
-  } 
-
-  drawTerrain(width+2, height+2);
+  drawTerrain();
 
   for(int i = 0; i < sizeof(gameTiles)/sizeof(gameTiles[0]); i++){
     drawGameTile(i);
   }
 }
+
+
+void writeOnBoardCenter(char* lines[], int numLines) {
+  saveCursor();
+  int boardHeight = getBoardMaxHeight();
+  int boardWidth = (getBoardMaxWidth() + 1) * 6 + 1;
+  int startX, startY;
+
+  startY = ((boardHeight - numLines) / 2) * 3 + 1;  // Calculate the starting Y position
+
+  if (startY < 0) {
+    startY = 0;
+  }
+
+  for (int i = 0; i < numLines; i++) {
+    startX = (boardWidth - strlen_utf8(lines[i])) / 2;  // Calculate the starting X position
+
+    if (startX < 0) {
+      startX = 0;
+    }
+
+    moveCursor(startX+1, (startY + i * 3) + 1);  // Move the cursor to the appropriate position
+    printf("%s", lines[i]);  // Print the line of text
+  }
+  restoreCursor();
+  waitInput("Press any key to continue...");
+}
+
