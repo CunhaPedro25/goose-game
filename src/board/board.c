@@ -1,32 +1,32 @@
 #include "board.h"
 
 GameTile gameTiles[] = {
-  {1, 1, BOOL},
+  {1, 1, TRUEFALSE},
   {2, 1, MULTIPLE},
   {3, 1, WRITTEN},
-  {4, 1, BOOL},
+  {4, 1, TRUEFALSE},
   {5, 1, MULTIPLE},
   {6, 1, WRITTEN},
 
-  {6, 2, BOOL},
+  {6, 2, TRUEFALSE},
   {6, 3, MULTIPLE},
   {6, 4, WRITTEN},
-  {6, 5, BOOL},
+  {6, 5, TRUEFALSE},
   {6, 6, MULTIPLE},
   {6, 7, WRITTEN},
 
-  {5, 7, BOOL},
+  {5, 7, TRUEFALSE},
   {4, 7, MULTIPLE},
   {3, 7, WRITTEN},
-  {2, 7, BOOL},
+  {2, 7, TRUEFALSE},
   {1, 7, MULTIPLE},
 
   {1, 6, WRITTEN},
-  {1, 5, BOOL},
+  {1, 5, TRUEFALSE},
   {1, 4, WRITTEN},
   {1, 3, MULTIPLE},
 
-  {2, 3, BOOL},
+  {2, 3, TRUEFALSE},
   {3, 3, MULTIPLE},
 
   {4, 3, END},

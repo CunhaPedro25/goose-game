@@ -5,12 +5,12 @@
 #include <math.h>
 
 #include "terrain.h"
-#include "../utils/functions.h"
-#include "../utils/ui.h"
+#include "../utils/functions/functions.h"
+#include "../utils/ui/ui.h"
 
 typedef enum{
   END = BLUE,
-  BOOL = YELLOW,
+  TRUEFALSE = YELLOW,
   MULTIPLE = MAGENTA,
   WRITTEN = CYAN
 }gameTileType;
