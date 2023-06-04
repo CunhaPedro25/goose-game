@@ -17,7 +17,7 @@
     #include<unistd.h>
 #endif
 
-#include "../utils/functions.h"
+#include "../utils/functions/functions.h"
 
 typedef struct question{
   char question[500];

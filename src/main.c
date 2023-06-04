@@ -7,15 +7,9 @@
 #include "game/game.h"
 #include "player/player.h"
 #include "questions/questions.h"
-#include "utils/ui.h"
-#include "utils/functions.h"
-#include "utils/menus.h"
-
-void settings(){
-  printf("%d", getNumberMultipleChoiceQuestions());
-
-  waitInput("...");
-}
+#include "utils/ui/ui.h"
+#include "utils/functions/functions.h"
+#include "utils/menus/menus.h"
 
 int main(){
   clearConsole();

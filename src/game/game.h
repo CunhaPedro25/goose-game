@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../utils/ui.h"
-#include "../utils/functions.h"
+#include "../utils/ui/ui.h"
+#include "../utils/functions/functions.h"
 #include "../board/board.h"
 #include "../questions/questions.h"
 #include "../player/player.h"

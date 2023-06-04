@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "../utils/ui.h"
+#include "../utils/ui/ui.h"
 #include "../board/board.h"
 
 typedef struct player {

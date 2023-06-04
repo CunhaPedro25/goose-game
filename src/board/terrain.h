@@ -6,7 +6,7 @@
 #include <time.h>
 
 #include "board.h"
-#include "../utils/ui.h"
+#include "../utils/ui/ui.h"
 
 enum terrain{
   NOTHING,
