@@ -1,14 +1,15 @@
 #include "game.h"
 
-int initializeGame(QuestionNode* boolQuestionList, QuestionNode* multipleChoiceQuestionList){
+int initializeGame(QuestionNode** boolQuestionList, QuestionNode** multipleChoiceQuestionList, QuestionNode** writtenQuestionList){
   int numPlayers;
 
   printf("How many players are in the game? (Min: 2; Max: 4)\n");
   printf("> ");
   getNumberFromRange(&numPlayers, 2, 4);
 
-  storeRandomizeQuestions(boolQuestionList);
-  storeRandomizeQuestions(multipleChoiceQuestionList);
+  storeRandomizedBoolQuestions(boolQuestionList);
+  storeRandomizedMultipleChoiceQuestions(multipleChoiceQuestionList);
+  storeRandomizedWrittenQuestions(writtenQuestionList);
 
   clearConsole();
   drawBoard();
@@ -16,6 +17,8 @@ int initializeGame(QuestionNode* boolQuestionList, QuestionNode* multipleChoiceQ
   for(int id = 0; id < numPlayers; id++){
     drawPlayer(id,1);
   }
+
+  return numPlayers;
 }
 
 void determinePlayerOrder(int *order, int numPlayers){
@@ -26,7 +29,7 @@ void determinePlayerOrder(int *order, int numPlayers){
         return;
     }
 
-    int cursorYposition = (getBoardMaxHeight()+3) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
+    int cursorYposition = (getBoardMaxHeight()+2) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
 
     moveCursor(0, cursorYposition);
 
@@ -43,58 +46,6 @@ void determinePlayerOrder(int *order, int numPlayers){
         order[id] = id;
         printf("%s's dice: %d\n", getPlayerName(id), dice[id]);
     }
-
-    // // Handle equal dice rolls
-    // int equalRollCount = 0;
-    // // Allocate the flag array to keep track of players already added
-    // int *playerAdded = (int *) calloc(numPlayers, sizeof(int));
-    // if (playerAdded == NULL) {
-    //     // Error handling for memory allocation failure
-    //     printf("Error: Memory allocation failed for playerAdded array.\n");
-    //     free(dice);
-    //     return;
-    // }
-
-    // do {
-    //   equalRollCount = 0;
-
-    //   for (int i = 0; i < numPlayers; i++) {
-    //     if(!playerAdded[i]){
-    //       for (int j = i + 1; j < numPlayers; j++) {
-    //         if (dice[i] == dice[j] && !playerAdded[j]) {
-    //           playerAdded[i] = 1;
-    //           playerAdded[j] = 1;
-    //           equalRollCount++;
-    //         }
-    //       }
-    //       if(equalRollCount == 0){
-    //         playerAdded[i] = 0;
-    //       }
-    //     }
-    //   }
-
-    //   if (equalRollCount > 0) {
-    //     setTextColor(RED, 0);
-    //     printf("\nEqual dice rolls!");
-    //     resetColor();
-
-    //     waitInput("\nPress any key to rematch...");
-
-    //     moveCursor(0, cursorYposition);
-    //     clearToScreenEnd();
-    //     setTextColor(YELLOW, 0);
-    //     printf("DICE RESULTS!\n");
-    //     resetColor();
-    //     for (int i = 0; i < numPlayers; i++) {
-    //       if(playerAdded[i]){
-    //         dice[i] = rand() % 6 + 1;
-    //         printf("%s's dice roll: %d\n", getPlayerName(i), dice[i]);
-    //       }
-    //     }
-    //   }
-    // } while (equalRollCount > 0);
-
-    // free(playerAdded);
 
     // Sort the players based on their dice rolls
     int temp;
@@ -127,16 +78,17 @@ void determinePlayerOrder(int *order, int numPlayers){
 void gameLoop(){
   QuestionNode* boolQuestionList = NULL;
   QuestionNode* multipleChoiceQuestionList = NULL;
+  QuestionNode* writtenQuestionList = NULL;
 
   bool gameover = false;
-  int numberOfSpaces = 0;
+  int numberOfSpaces;
   int optionAnswer = 0;
   char writtenAnswer[100];
-  int cursorYposition = (getBoardMaxHeight()+3) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
-  Questions* question = NULL;
+  int cursorYposition = (getBoardMaxHeight()+2) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
+  Questions question;
 
   // Call function to ask for numPlayers, create map, and draw players
-  int numPlayers = initializeGame(boolQuestionList, multipleChoiceQuestionList);
+  int numPlayers = initializeGame(&boolQuestionList, &multipleChoiceQuestionList, &writtenQuestionList);
 
   int *order = (int *) malloc(numPlayers * sizeof(int));
   if (order == NULL) {
@@ -152,40 +104,71 @@ void gameLoop(){
       moveCursor(0,cursorYposition);
       clearToScreenEnd();
 
-      bool correct;
+      bool correct = false;
       numberOfSpaces = rand() % 6 + 1;
 
       printf("%s's turn | Points: %2d \n", getPlayerName(order[id]), playerCurrentTile(order[id])-1);
-      printf("Question Type: %d | Question Points: +%d\n", getGameTileType(playerCurrentTile(id)), numberOfSpaces);
+      printf("Question Type: %d | Question Points: +%d\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
 
-      switch(getGameTileType(playerCurrentTile(id))){
+      switch(getGameTileType(playerCurrentTile(order[id]))){
         case BOOL:
-            question = getRandomBoolQuestion(boolQuestionList);
+            if(getQuestionFromList(&boolQuestionList, &question)){
+              printf("%s\n", question.question);
+              printf("1 - True\n2 - False\n");
 
-            printf("%s\n", question->question);
-            printf("1 - True\n2 - False\n");
+              getNumberFromRange(&optionAnswer, 1,2);
+              correct = verifyBoolQuestion(question.answer, optionAnswer);
+            }else{
+              gameover = true;
+              char* lines[] = {
+                "Game Over!",
+                "No more True or False Questions"
+              };
+              int numLines = sizeof(lines) / sizeof(lines[0]);
 
-            getNumberFromRange(&optionAnswer, 1,2);
-            correct = verifyBoolQuestion(question->answer, optionAnswer);
+              writeOnBoardCenter(lines, numLines);
+            }
           break;
         case MULTIPLE:
-            question = getRandomMultipleChoiceQuestion(multipleChoiceQuestionList);
+            if(getQuestionFromList(&multipleChoiceQuestionList, &question)){
+              printf("Question: %s\n", question.question);
 
-            int correctIndex = getCorrectAnswerIndex(question->answer, question->wrongAnswers);
-            getNumberFromRange(&optionAnswer, 1,2);
+              int correctIndex = getCorrectAnswerIndex(question.answer, question.wrongAnswers);
+              getNumberFromRange(&optionAnswer, 1,4);
 
-            correct = (optionAnswer == correctIndex);
+              correct = (optionAnswer == correctIndex);
+            }else{
+              gameover = true;
+              char* lines[] = {
+                "Game Over!",
+                "No more Multiple Choice Questions"
+              };
+              int numLines = sizeof(lines) / sizeof(lines[0]);
+
+              writeOnBoardCenter(lines, numLines);
+            }
           break;
         case WRITTEN:
-            question = getRandomBoolQuestion(boolQuestionList);
+            if(getQuestionFromList(&writtenQuestionList, &question)){
+              printf("%s\n", question.question);
 
-            printf("%s\n", question->question);
-            printf("1 - True\n2 - False\n");
+              getString(writtenAnswer, 100);
+              correct = strcasecmp(question.answer, writtenAnswer) == 0;
+            }else{
+              gameover = true;
+              char* lines[] = {
+                "Game Over!",
+                "No more Direct Answer Questions"
+              };
+              int numLines = sizeof(lines) / sizeof(lines[0]);
 
-            getNumberFromRange(&optionAnswer, 1,2);
-            correct = verifyBoolQuestion(question->answer, optionAnswer);
+              writeOnBoardCenter(lines, numLines);
+            }
           break;
       }
+
+      if(gameover) break;
+
 
       if(correct){
         printf("Correct!\n");
@@ -194,9 +177,21 @@ void gameLoop(){
           drawPlayer(order[id], playerCurrentTile(order[id]) + numberOfSpaces);
         }else{
           drawPlayer(order[id], getBoardLength());
+          moveCursor(0,cursorYposition);
+          clearToScreenEnd();
           gameover = true;
-          printf("%s WON!\n", getPlayerName(order[id]));
-          printf("%d points", playerCurrentTile(order[id])-1);
+
+
+          char playerWonString[100];
+          snprintf(playerWonString, sizeof(playerWonString), "%s Won!", getPlayerName(order[id]));
+
+          char* lines[] = {
+            "Game Over!",
+            playerWonString
+          };
+          int numLines = sizeof(lines) / sizeof(lines[0]);
+
+          writeOnBoardCenter(lines, numLines);
           break;
         }
       }else{
@@ -208,16 +203,14 @@ void gameLoop(){
           drawPlayer(order[id], 1);
         }
       }
-
       restoreCursor();
+
       waitInput("Press any key to continue...");
     }
-
   }while(!gameover);
 
-  moveCursor(0,cursorYposition);
-  waitInput("Press any key to continue...");
-
+  free(order);
   freeQuestionList(boolQuestionList);
   freeQuestionList(multipleChoiceQuestionList);
+  freeQuestionList(writtenQuestionList);
 }

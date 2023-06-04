@@ -60,7 +60,7 @@ int getBoardMaxHeight(){
     }
   }
 
-  return height;
+  return height+1;  // +1 because terrain always has an extra tile
 }
 
 int getBoardMaxWidth(){
@@ -72,7 +72,7 @@ int getBoardMaxWidth(){
     }
   }
 
-  return width;
+  return width+1;
 }
 
 int getEndTilePosition(int *x, int *y){
@@ -113,3 +113,31 @@ void drawBoard(){
     drawGameTile(i);
   }
 }
+
+
+void writeOnBoardCenter(char* lines[], int numLines) {
+  saveCursor();
+  int boardHeight = getBoardMaxHeight();
+  int boardWidth = (getBoardMaxWidth() + 1) * 6 + 1;
+  int startX, startY;
+
+  startY = ((boardHeight - numLines) / 2) * 3 + 1;  // Calculate the starting Y position
+
+  if (startY < 0) {
+    startY = 0;
+  }
+
+  for (int i = 0; i < numLines; i++) {
+    startX = (boardWidth - strlen_utf8(lines[i])) / 2;  // Calculate the starting X position
+
+    if (startX < 0) {
+      startX = 0;
+    }
+
+    moveCursor(startX+1, (startY + i * 3) + 1);  // Move the cursor to the appropriate position
+    printf("%s", lines[i]);  // Print the line of text
+  }
+  restoreCursor();
+  waitInput("Press any key to continue...");
+}
+

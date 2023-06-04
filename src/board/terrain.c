@@ -1,6 +1,4 @@
 #include "terrain.h"
-#include "board.h"
-#include "../utils/ui.h"
 
 void addSandToWater(int **map, int width, int height){
   int i, j;
@@ -29,14 +27,14 @@ void addSandToWater(int **map, int width, int height){
 void generateWater(int **map, int width, int height){
   int num_water_tiles = 0;
   int max_water_tiles = width * height / 8;
-  
+
   int i = 0;
   int j = 0;
 
   // add some random water tiles
   getEndTilePosition(&i, &j);
   map[j][i] = WATER;
-  if(j > 0){   
+  if(j > 0){
     map[j-1][i] = WATER;
   }
   map[j+1][i] = WATER;
@@ -99,8 +97,8 @@ void generateTerrain(int **map, int width, int height){
 
 void drawTerrain(){
   int **map;
-  int height = getBoardMaxHeight()+2;
-  int width = getBoardMaxWidth()+2;
+  int height = getBoardMaxHeight()+1;  // +1 is needed because it needs to create an array from 0 to BoardMaxHeight
+  int width = getBoardMaxWidth()+1;
 
   map = (int **) malloc(height * sizeof(int*));
   for(int i = 0; i < height; i++){
@@ -114,7 +112,7 @@ void drawTerrain(){
 
   for(int i = 0; i < height; i++){
     for(int j = 0; j < width; j++){
-      x = j * 6 +1; 
+      x = j * 6 +1;
       y = i * 3 +1;
 
       setBackgroundColor(map[i][j], 1);
@@ -128,5 +126,9 @@ void drawTerrain(){
   }
 
 
+  // Free the memory allocated for the map
+  for(int i = 0; i < height; i++){
+    free(map[i]);
+  }
   free(map);
 }

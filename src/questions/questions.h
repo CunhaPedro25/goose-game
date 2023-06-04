@@ -7,6 +7,16 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifdef _WIN32
+    #include <windows.h>
+#elif __linux__
+    #include <sys/stat.h>
+#elif __APPLE__
+    #include <sys/stat.h>
+#endif
+
+#include "../utils/functions.h"
+
 typedef struct question{
   char question[500];
   char answer[100];

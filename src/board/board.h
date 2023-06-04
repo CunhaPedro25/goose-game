@@ -2,6 +2,7 @@
 #define TILES_H
 
 #include <stdio.h>
+#include <math.h>
 
 #include "terrain.h"
 #include "../utils/functions.h"
@@ -28,5 +29,7 @@ int getEndTilePosition(int *x, int *y);
 int getBoardMaxHeight();
 int getBoardMaxWidth();
 int getBoardLength();
+
+void writeOnBoardCenter(char* lines[], int numLines);
 
 #endif

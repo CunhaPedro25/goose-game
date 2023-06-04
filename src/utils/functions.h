@@ -7,8 +7,23 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <errno.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+#elif __linux__
+    #include <sys/stat.h>
+#elif __APPLE__
+    #include <sys/stat.h>
+#endif
+
 
 #include "ui.h"
+#include "../questions/questions.h"
+
+void getPlatformFilePath(char* platformPath);
+int createFolder(const char* folderPath);
+void installGame();
 
 void showSpecificInvalidOption(char *text);
 
