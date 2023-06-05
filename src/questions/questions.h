@@ -6,16 +6,19 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
 #ifdef _WIN32
     #include <windows.h>
 #elif __linux__
     #include <sys/stat.h>
+    #include<unistd.h>
 #elif __APPLE__
     #include <sys/stat.h>
+    #include<unistd.h>
 #endif
 
-#include "../utils/functions.h"
+#include "../utils/functions/functions.h"
 
 typedef struct question{
   char question[500];
@@ -37,6 +40,7 @@ bool editQuestionFile(char *filePath, Questions question, int line);
 bool deleteQuestionFromFile(char *filePath, int line);
 bool addToQuestionFile(char *filePath, Questions question);
 bool getQuestion(char *filePath, Questions* question, int line);
+int searchForQuestion(char *filePath, char *search);
 
 bool storeRandomizedQuestions(char *filepath, QuestionNode** head);
 bool getQuestionFromList(QuestionNode** head, Questions* question);
@@ -48,6 +52,7 @@ bool editBoolQuestion(int line, Questions newQuestion);
 bool deleteBoolQuestion(int line);
 bool addNewBoolQuestion(Questions newQuestion);
 bool getBoolQuestion(Questions* question, int line);
+int searchForBoolQuestion(char *search);
 
 // Game functions for bool questions
 bool verifyBoolQuestion(char *correctAnswer, int userAnswer);
@@ -61,6 +66,7 @@ bool editMultipleChoiceQuestion(int line, Questions newQuestion);
 bool deleteMultipleChoiceQuestion(int line);
 bool addNewMultipleChoiceQuestion(Questions newQuestion);
 bool getMultipleChoiceQuestion(Questions* question, int line);
+int searchForMultipleChoiceQuestion(char *search);
 
 // Game functions for multiple choice questions
 int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]);
@@ -74,6 +80,7 @@ bool editWrittenQuestion(int line, Questions newQuestion);
 bool deleteWrittenQuestion(int line);
 bool addNewWrittenQuestion(Questions newQuestion);
 bool getWrittenQuestion(Questions* question, int line);
+int searchForWrittenQuestion(char *search);
 
 // Game functions for bool questions
 bool storeRandomizedWrittenQuestions(QuestionNode** head);

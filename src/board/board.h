@@ -3,14 +3,15 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <dirent.h>
 
 #include "terrain.h"
-#include "../utils/functions.h"
-#include "../utils/ui.h"
+#include "../utils/functions/functions.h"
+#include "../utils/ui/ui.h"
 
 typedef enum{
   END = BLUE,
-  BOOL = YELLOW,
+  TRUEFALSE = YELLOW,
   MULTIPLE = MAGENTA,
   WRITTEN = CYAN
 }gameTileType;
@@ -21,7 +22,18 @@ typedef struct gameTile {
   gameTileType type;
 } GameTile;
 
+typedef struct board{
+  int numberOfTiles;
+  char name[20];
+  GameTile *gameTiles;
+}Board;
+
+void installBoards();
+
+
 void drawBoard();
+void getBoardsInFolder();
+void freeBoard();
 
 void getGameTilePosition(int tileNumber, int* x, int* y);
 int getGameTileType(int tileNumber);

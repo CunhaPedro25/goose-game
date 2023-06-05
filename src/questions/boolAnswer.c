@@ -16,10 +16,15 @@ bool addNewBoolQuestion(Questions newQuestion){
   return addToQuestionFile("boolQuestions.dat", newQuestion);
 }
 
-
 bool getBoolQuestion(Questions* question, int line){
   return getQuestion("boolQuestions.dat", question, line);
 }
+
+int searchForBoolQuestion(char *search){
+  return searchForQuestion("boolQuestions.dat", search);
+}
+
+
 
 /* Functions used for Game */
 bool verifyBoolQuestion(char *correctAnswer, int userAnswer){

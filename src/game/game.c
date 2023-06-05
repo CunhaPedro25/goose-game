@@ -1,15 +1,176 @@
 #include "game.h"
 
+#define FILE_PATH_LENGTH 256
+#define EXTRA_PATH_LENGTH 512
+
+#ifdef _WIN32
+    #define PLATFORM_PATH_ENV "LOCALAPPDATA"
+    #define PLATFORM_FOLDER "gooseGame\\games\\"
+#elif __linux__
+    #define PLATFORM_PATH_ENV "HOME"
+    #define PLATFORM_FOLDER ".gooseGame/games/"
+#elif __APPLE__
+    #define PLATFORM_PATH_ENV "HOME"
+    #define PLATFORM_FOLDER "Applications/gooseGame/games/"
+#endif
+
+void getAllGames(Games* games, int maxGames){
+  char platformPath[FILE_PATH_LENGTH];
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
+
+  char fullPath[EXTRA_PATH_LENGTH];
+  sprintf(fullPath, "%s%s", platformPath, "allGames.dat");
+  FILE *file = fopen(fullPath, "rb");
+  if(file == NULL){
+    return;
+  }
+
+  long int position = sizeof(int);
+
+  fseek(file, position, SEEK_SET);
+
+  fread(games, sizeof(Games), maxGames, file);
+
+  fclose(file);
+}
+
+int getMaxGamesSaved(){
+  char platformPath[FILE_PATH_LENGTH];
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
+
+  char fullPath[EXTRA_PATH_LENGTH];
+  sprintf(fullPath, "%s%s", platformPath, "allGames.dat");
+  FILE *file = fopen(fullPath, "rb");
+  if(file == NULL){
+    return 0;
+  }
+
+  int numOfGames;
+  fread(&numOfGames, sizeof(int), 1, file);
+
+  fclose(file);
+  return numOfGames;
+}
+
+void getGameInfo(Games* game, int id){
+  char platformPath[FILE_PATH_LENGTH];
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
+
+  char fullPath[EXTRA_PATH_LENGTH];
+  sprintf(fullPath, "%s%s", platformPath, "allGames.dat");
+  FILE *file = fopen(fullPath, "rb+");
+  if(file == NULL){
+    return;
+  }
+
+  long int position = sizeof(int) + id * sizeof(Games);
+
+  // Move the file pointer to the calculated position
+  fseek(file, position, SEEK_SET);
+
+  fread(game, sizeof(Games), 1, file);
+
+  fclose(file);
+}
+
+void saveGameToDB(int numPlayers){
+  char platformPath[FILE_PATH_LENGTH];
+  getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
+
+  char fullPath[EXTRA_PATH_LENGTH];
+  sprintf(fullPath, "%s%s", platformPath, "allGames.dat");
+  FILE *file = fopen(fullPath, "rb+");
+  if(file == NULL){
+    return;
+  }
+
+  int numOfGames;
+  fread(&numOfGames, sizeof(int), 1, file);
+  numOfGames++;
+  fseek(file, 0, SEEK_SET);
+  fwrite(&numOfGames, sizeof(int), 1, file);
+
+
+  Games game;
+  memset(&game, 0, sizeof(Games));
+
+  game.numberOfPlayers = numPlayers;
+  Player tempPlayer;
+  for(int i = 0; i < numPlayers; i++){
+    getPlayer(&tempPlayer, i);
+    game.players[i] = tempPlayer;
+  }
+  currentDate(game.date);
+
+  fseek(file, 0, SEEK_END);
+  fwrite(&game, sizeof(Games), 1, file);
+
+  fclose(file);
+}
+
+
+/* LIVE GAME FUNCTIONS*/
+
 int initializeGame(QuestionNode** boolQuestionList, QuestionNode** multipleChoiceQuestionList, QuestionNode** writtenQuestionList){
   int numPlayers;
+  char name[100];
+  int number;
 
+  clearConsole();
   printf("How many players are in the game? (Min: 2; Max: 4)\n");
   printf("> ");
   getNumberFromRange(&numPlayers, 2, 4);
 
+  createPlayers(numPlayers);
+
+  for(int i = 0; i < numPlayers; i++){
+    clearConsole();
+
+    printf("Player %d name\n", i+1);
+    printf("> ");
+    do{
+      saveCursor();
+      getString(name, 100);
+      savePlayerName(i, name);
+    }while(isNameTaken(name, i));
+
+    do{
+      printf("\nPlayer color:\n");
+      if(!isColorTaken(RED, i)){
+        setTextColor(RED, 1);
+        printf("1 - RED\n");
+      }
+
+      if(!isColorTaken(GREEN, i)){
+        setTextColor(GREEN, 1);
+        printf("2 - GREEN\n");
+      }
+
+      if(!isColorTaken(YELLOW, i)){
+        setTextColor(YELLOW, 1);
+        printf("3 - YELLOW\n");
+      }
+
+      if(!isColorTaken(BLUE, i)){
+        setTextColor(BLUE, 1);
+        printf("4 - BLUE\n");
+      }
+
+      resetColor();
+      printf("> ");
+      getNumberFromRange(&number, 1,4);
+      moveCursor(0,3);
+      clearToScreenEnd();
+    }while(isColorTaken(number, i));
+
+    savePlayerColor(i, number);
+  }
+
   storeRandomizedBoolQuestions(boolQuestionList);
   storeRandomizedMultipleChoiceQuestions(multipleChoiceQuestionList);
   storeRandomizedWrittenQuestions(writtenQuestionList);
+
+  getBoardsInFolder();
 
   clearConsole();
   drawBoard();
@@ -80,13 +241,6 @@ void gameLoop(){
   QuestionNode* multipleChoiceQuestionList = NULL;
   QuestionNode* writtenQuestionList = NULL;
 
-  bool gameover = false;
-  int numberOfSpaces;
-  int optionAnswer = 0;
-  char writtenAnswer[100];
-  int cursorYposition = (getBoardMaxHeight()+2) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
-  Questions question;
-
   // Call function to ask for numPlayers, create map, and draw players
   int numPlayers = initializeGame(&boolQuestionList, &multipleChoiceQuestionList, &writtenQuestionList);
 
@@ -99,6 +253,14 @@ void gameLoop(){
 
   determinePlayerOrder(order, numPlayers);
 
+  bool gameover = false;
+  int numberOfSpaces;
+  int optionAnswer = 0;
+  char writtenAnswer[100];
+  int cursorYposition = (getBoardMaxHeight()+2) * 3 + 1;  //Covert to screen position (screen_y = y * 3 + 1)
+  Questions question;
+
+
   do{
     for(int id = 0; id < numPlayers; id++){
       moveCursor(0,cursorYposition);
@@ -108,14 +270,15 @@ void gameLoop(){
       numberOfSpaces = rand() % 6 + 1;
 
       printf("%s's turn | Points: %2d \n", getPlayerName(order[id]), playerCurrentTile(order[id])-1);
-      printf("Question Type: %d | Question Points: +%d\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
+      printf("Question Type: %d | Question Points: +%d\n\n", getGameTileType(playerCurrentTile(order[id])), numberOfSpaces);
 
       switch(getGameTileType(playerCurrentTile(order[id]))){
-        case BOOL:
+        case TRUEFALSE:
             if(getQuestionFromList(&boolQuestionList, &question)){
-              printf("%s\n", question.question);
+              printf("Question: %s\n", question.question);
               printf("1 - True\n2 - False\n");
 
+              printf("\n> ");
               getNumberFromRange(&optionAnswer, 1,2);
               correct = verifyBoolQuestion(question.answer, optionAnswer);
             }else{
@@ -134,6 +297,8 @@ void gameLoop(){
               printf("Question: %s\n", question.question);
 
               int correctIndex = getCorrectAnswerIndex(question.answer, question.wrongAnswers);
+
+              printf("\n> ");
               getNumberFromRange(&optionAnswer, 1,4);
 
               correct = (optionAnswer == correctIndex);
@@ -150,8 +315,9 @@ void gameLoop(){
           break;
         case WRITTEN:
             if(getQuestionFromList(&writtenQuestionList, &question)){
-              printf("%s\n", question.question);
+            printf("Question: %s\n", question.question);
 
+              printf("> ");
               getString(writtenAnswer, 100);
               correct = strcasecmp(question.answer, writtenAnswer) == 0;
             }else{
@@ -171,7 +337,7 @@ void gameLoop(){
 
 
       if(correct){
-        printf("Correct!\n");
+        printf("Correct!\n\n");
         saveCursor();
         if(playerCurrentTile(order[id]) + numberOfSpaces < getBoardLength()){
           drawPlayer(order[id], playerCurrentTile(order[id]) + numberOfSpaces);
@@ -196,6 +362,10 @@ void gameLoop(){
         }
       }else{
         printf("Wrong!\n");
+
+        if(getGameTileType(playerCurrentTile(order[id])) != TRUEFALSE){
+          printf("Correct Answer: %s\n\n", question.answer);
+        }
         saveCursor();
         if(playerCurrentTile(order[id]) - numberOfSpaces > 0){
           drawPlayer(order[id], playerCurrentTile(order[id]) - numberOfSpaces);
@@ -209,8 +379,14 @@ void gameLoop(){
     }
   }while(!gameover);
 
+  printf("%d", numPlayers);
+  waitInput("...");
+  saveGameToDB(numPlayers);
+
   free(order);
   freeQuestionList(boolQuestionList);
   freeQuestionList(multipleChoiceQuestionList);
   freeQuestionList(writtenQuestionList);
+  freePlayers();
+  freeBoard();
 }

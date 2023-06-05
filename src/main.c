@@ -7,16 +7,28 @@
 #include "game/game.h"
 #include "player/player.h"
 #include "questions/questions.h"
-#include "utils/ui.h"
-#include "utils/functions.h"
+#include "utils/ui/ui.h"
+#include "utils/functions/functions.h"
+#include "utils/menus/menus.h"
 
 int main(){
   clearConsole();
 
+  int selection;
+
   installGame();
-  gameLoop();
+
+  do{
+    MenuOptions options[] = {
+      {"Play", gameLoop},
+      {"Settings", settings}
+    };
+
+    selection = menu("Goose Game", options, sizeof(options)/sizeof(options[0]), "main");
+
+    if(selection != 0) options[selection-1].callback();
+  }while(selection != 0);
 
   clearConsole();
-
   return 0;
 }

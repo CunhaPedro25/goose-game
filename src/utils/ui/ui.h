@@ -2,6 +2,8 @@
 #define UI_H
 
 #include <stdio.h>
+#include <string.h>
+
 
 #define prefix "\e["
 
