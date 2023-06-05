@@ -20,6 +20,11 @@ bool getWrittenQuestion(Questions* question, int line){
   return getQuestion("writtenQuestions.dat", question, line);
 }
 
+int searchForWrittenQuestion(char *search){
+  return searchForQuestion("writtenChoiceQuestions.dat", search);
+}
+
+
 /* Functions used for Game */
 bool storeRandomizedWrittenQuestions(QuestionNode** head){
   return storeRandomizedQuestions("writtenQuestions.dat", head);

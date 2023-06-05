@@ -165,6 +165,27 @@ bool getQuestion(char *filePath, Questions* question, int line){
   return true;
 }
 
+int searchForQuestion(char *filePath, char *search){
+  int numQuestions = getNumberQuestions(filePath);
+  if(numQuestions == -1){
+    printf("No questions");
+    return 0;
+  }
+
+  Questions question;
+  memset(&question, 0, sizeof(Questions));
+  for(int i = 1; i <= numQuestions; i++){
+    getQuestion(filePath, &question, i);
+    convertToLowercase(question.question);
+    convertToLowercase(search);
+    if(strstr(question.question, search) != NULL){
+      return i;
+    }
+  }
+
+  return 0;
+}
+
 // Game function
 bool storeRandomizedQuestions(char *filePath, QuestionNode** head){
   int numQuestions = getNumberQuestions(filePath);

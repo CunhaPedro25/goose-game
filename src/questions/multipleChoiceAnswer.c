@@ -20,6 +20,10 @@ bool getMultipleChoiceQuestion(Questions* question, int line){
   return getQuestion("multipleChoiceQuestions.dat", question, line);
 }
 
+int searchForMultipleChoiceQuestion(char *search){
+  return searchForQuestion("multipleChoiceQuestions.dat", search);
+}
+
 
 /* Functions used for Game */
 int getCorrectAnswerIndex(char correctAnswer[100], char wrongAnswers[3][100]){

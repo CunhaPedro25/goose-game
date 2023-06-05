@@ -31,6 +31,7 @@ void getPlatformFilePath(char* platformPath, char* platformEnv, char* platformFo
 int createFolder(const char* folderPath);
 void installGame();
 
+void convertToLowercase(char* str);
 void currentDate(char* date);
 void showSpecificInvalidOption(char *text);
 

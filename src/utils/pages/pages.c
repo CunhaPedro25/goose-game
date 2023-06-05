@@ -49,6 +49,9 @@ int validPagesOption(char *option, int *id, int maxID){
       /*Remove*/
       case 'r':
       case 'R':
+      /*Search*/
+      case 's':
+      case 'S':
       /*Leave*/
       case 'q':
       case 'Q':
@@ -67,7 +70,7 @@ int validPagesOption(char *option, int *id, int maxID){
 int pageControls(int *id, int maxID){
   char option[10];
 
-  char *functions = "Create [W] Edit [E]  Remove [R]  Other <id>  Quit [Q] ";
+  char *functions = " Search [S] Create [W] Edit [E]  Remove [R]  Other <id>  Quit [Q] ";
   int lineSize = (int) strlen(functions);
 
   /* Render functions for table */
@@ -106,6 +109,10 @@ int pageControls(int *id, int maxID){
 
   if((strcmp(option, "e") == 0 || strcmp(option, "E") == 0) && maxID > 0){
     return -3;    // Code to detect that its in edit menu
+  }
+
+  if((strcmp(option, "s") == 0 || strcmp(option, "S") == 0) && maxID > 0){
+    return -4;    // Code to detect that its in edit menu
   }
 
   /* Check if it's a number and return its value if true (0 - MaxID) */

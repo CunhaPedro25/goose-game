@@ -146,6 +146,11 @@ void installGame(){
 }
 
 
+void convertToLowercase(char* str) {
+  for (int i = 0; str[i]; i++) {
+      str[i] = tolower((unsigned char)str[i]);
+  }
+}
 
 void currentDate(char* date) {
   time_t t = time(NULL);

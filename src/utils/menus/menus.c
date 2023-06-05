@@ -77,6 +77,15 @@ void multipleChoicePage(){
       }
     }
 
+    if(option == -4) {
+      printf("Search for Multiple Choice Question\n");
+      char search[500];
+      printf("\n> ");
+      getString(search, 500);
+
+      option = searchForMultipleChoiceQuestion(search);
+    }
+
 
     if(option >= 1 && option <= numQuestions)
       id = option;
@@ -141,6 +150,15 @@ void writtenPage(){
 
         editWrittenQuestion(id, question);
       }
+    }
+
+    if(option == -4) {
+      printf("Search for Direct Answer Question\n");
+      char search[500];
+      printf("\n> ");
+      getString(search, 500);
+
+      option = searchForWrittenQuestion(search);
     }
 
     if(option >= 1 && option <= numQuestions)
@@ -213,6 +231,15 @@ void boolPage(){
 
         editBoolQuestion(id, question);
       }
+    }
+
+    if(option == -4) {
+      printf("Search for True or False Question\n");
+      char search[500];
+      printf("\n> ");
+      getString(search, 500);
+
+      option = searchForBoolQuestion(search);
     }
 
     if(option >= 1 && option <= numQuestions)
