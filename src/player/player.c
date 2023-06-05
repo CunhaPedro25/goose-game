@@ -52,6 +52,10 @@ int playerCurrentTile(int id){
     return players[id].currentTile;
 }
 
+void getPlayer(Player* player, int id){
+  *player =  players[id];
+}
+
 void drawPlayer(int id, int tile) {
     int x, y;
     int oldTile = playerCurrentTile(id);

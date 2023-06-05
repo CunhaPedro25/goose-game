@@ -13,6 +13,16 @@
 #include "../questions/questions.h"
 #include "../player/player.h"
 
+typedef struct game{
+  int numberOfPlayers;
+  Player players[4];
+  char date[80];
+}Games;
+
+void getAllGames(Games* games, int maxGames);
+void getGameInfo(Games* game, int id);
+int getMaxGamesSaved();
+
 void gameLoop();
 
 #endif

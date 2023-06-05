@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <dirent.h>
 
 #include "terrain.h"
 #include "../utils/functions/functions.h"
@@ -21,7 +22,18 @@ typedef struct gameTile {
   gameTileType type;
 } GameTile;
 
+typedef struct board{
+  int numberOfTiles;
+  char name[20];
+  GameTile *gameTiles;
+}Board;
+
+void installBoards();
+
+
 void drawBoard();
+void getBoardsInFolder();
+void freeBoard();
 
 void getGameTilePosition(int tileNumber, int* x, int* y);
 int getGameTileType(int tileNumber);

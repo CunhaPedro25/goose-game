@@ -9,6 +9,8 @@
 #include "../ui/ui.h"
 #include "../functions/functions.h"
 #include "../pages/pages.h"
+#include "../tables/tables.h"
+#include "../../game/game.h"
 
 typedef void (*Callback)();
 

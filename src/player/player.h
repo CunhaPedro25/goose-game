@@ -14,6 +14,7 @@ typedef struct player {
   int currentTile;
 } Player;
 
+void freePlayers();
 void createPlayers(int numPlayers);
 
 bool isNameTaken(const char* name, int currentPlayer);
@@ -23,6 +24,7 @@ void savePlayerColor(int id, int color);
 
 char *getPlayerName(int id);
 int playerCurrentTile(int id);
+void getPlayer(Player* player, int id);
 
 void drawPlayer(int id, int tile);
 

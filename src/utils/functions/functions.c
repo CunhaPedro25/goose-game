@@ -15,15 +15,15 @@
 #endif
 
 void getPlatformFilePath(char* platformPath, char* platformEnv, char* platformFolder) {
-#ifdef _WIN32
+  #ifdef _WIN32
     // Windows
     const char* appDataPath = getenv(platformEnv);
     sprintf(platformPath, "%s\\%s", appDataPath, platformFolder);
-#elif __linux__ || __APPLE__
+  #elif __linux__ || __APPLE__
     // Linux and macOS
     const char* homePath = getenv(platformEnv);
     sprintf(platformPath, "%s/%s", homePath, platformFolder);
-#endif
+  #endif
 }
 
 int mkdir_recursive(const char* folderPath, mode_t mode) {
@@ -62,6 +62,7 @@ int createFolder(const char* folderPath) {
 }
 
 void installGame(){
+  int number;
   char platformPath[FILE_PATH_LENGTH], fullPath[EXTRA_PATH_LENGTH];
   getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
 
@@ -96,7 +97,7 @@ void installGame(){
     printf("Password: ");
     getString(admin.password, 100);
 
-    int number = 1;
+    number = 1;
     fseek(file, 0, SEEK_SET);
     fwrite(&number, sizeof(int), 1, file);
 
@@ -113,10 +114,44 @@ void installGame(){
   }
 
   installQuestionFiles();
+
+  snprintf(fullPath, sizeof(fullPath), "%s%s", platformPath, "boards/");
+  if (!createFolder(fullPath)) {
+    printf("Error creating folder: %s\n", fullPath);
+    return;
+  }
+  installBoards();
+
+  snprintf(fullPath, sizeof(fullPath), "%s%s", platformPath, "games/");
+  if (!createFolder(fullPath)) {
+    printf("Error creating folder: %s\n", fullPath);
+    return;
+  }
+
+  sprintf(fullPath, "%s%s", platformPath, "games/allGames.dat");
+  file = fopen(fullPath, "rb");
+  if(file == NULL){
+    file = fopen(fullPath, "wb");
+    if(file == NULL){
+      printf("Error creating file: %s\n", fullPath);
+      return;
+    }
+
+    number = 0;
+    fseek(file, 0, SEEK_SET);
+    fwrite(&number, sizeof(int), 1, file);
+
+  }
+  fclose(file);
 }
 
 
 
+void currentDate(char* date) {
+  time_t t = time(NULL);
+  struct tm* tm = localtime(&t);
+  strftime(date, 80, "%d/%m/%Y", tm);
+}
 
 
 void showSpecificInvalidOption(char *text){
@@ -226,6 +261,25 @@ bool askConfirmation(char *question){
   return strcmp(string, "y") == 0 || strcmp(string, "Y") == 0;
 }
 
+void closedLine(int size) {
+  for (int i = 0; i < size-2; ++i) {
+    printf("-");
+  }
+
+  printf("\n");
+}
+
+void renderTitle(const char *title) {
+  int titleSize = (int)(strlen_utf8(title) + strlen("/*--  --*/"));
+
+  closedLine(titleSize);
+  printf("/*--%s--*/\n", title);
+  closedLine(titleSize);
+}
+
+
+
+/* ADMIN FUNCTIONS */
 
 bool editAdmin(int id){
   char platformPath[FILE_PATH_LENGTH];

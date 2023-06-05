@@ -18,9 +18,9 @@
     #include <sys/stat.h>
 #endif
 
-
-#include "../ui/ui.h"
+#include "../../board/board.h"
 #include "../../questions/questions.h"
+#include "../ui/ui.h"
 
 typedef struct admin{
     char username[100];
@@ -31,6 +31,7 @@ void getPlatformFilePath(char* platformPath, char* platformEnv, char* platformFo
 int createFolder(const char* folderPath);
 void installGame();
 
+void currentDate(char* date);
 void showSpecificInvalidOption(char *text);
 
 size_t strlen_utf8(const char *string);
@@ -44,6 +45,7 @@ bool getNumberFromRange(int *answer, int min, int max);
 
 void waitInput(char *message);
 bool askConfirmation(char *question);
+void renderTitle(const char *title);
 
 bool editAdmin(int id);
 bool deleteAdmin(int id);

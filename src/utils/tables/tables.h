@@ -1,5 +1,6 @@
-#ifndef PAGES_H
-#define PAGES_H
+
+#ifndef TABLE_H
+#define TABLE_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +10,6 @@
 #include "../ui/ui.h"
 #include "../functions/functions.h"
 
-int pageControls(int *id, int maxID);
+int tableControls(int *size, int maxID, int lineSize);
 
-#endif //PAGES_H
+#endif //TABLE_H
