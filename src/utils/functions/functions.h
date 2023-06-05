@@ -48,6 +48,8 @@ void waitInput(char *message);
 bool askConfirmation(char *question);
 void renderTitle(const char *title);
 
+
+int searchForAdmin(char *search);
 bool editAdmin(int id);
 bool deleteAdmin(int id);
 void addNewAdmin();

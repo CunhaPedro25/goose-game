@@ -286,6 +286,25 @@ void renderTitle(const char *title) {
 
 /* ADMIN FUNCTIONS */
 
+int searchForAdmin(char *search){
+  int numAdmins = getNumberAdmins();
+  if(numAdmins == -1){
+    printf("No questions");
+    return 0;
+  }
+
+  Admins admin;
+  memset(&admin, 0, sizeof(Admins));
+  for(int i = 1; i <= numAdmins; i++){
+    getAdmin(&admin, i);
+    if(strcasecmp(admin.username, search) == 0){
+      return i;
+    }
+  }
+
+  return 0;
+}
+
 bool editAdmin(int id){
   char platformPath[FILE_PATH_LENGTH];
   getPlatformFilePath(platformPath, PLATFORM_PATH_ENV, PLATFORM_FOLDER);
@@ -301,9 +320,17 @@ bool editAdmin(int id){
   Admins admin;
   memset(&admin, 0, sizeof(Admins));
   clearConsole();
-  printf("Edit user %d\n", id);
+  printf("Edit Admin %d\n", id);
   printf("Username: ");
-  getString(admin.username, 100);
+  do{
+    moveCursor(11,2);
+    clearToLineEnd();
+    getString(admin.username, 100);
+
+    if(searchForAdmin(admin.username))
+      showSpecificInvalidOption("[USERNAME TAKEN]");
+  }while(searchForAdmin(admin.username));
+
   printf("Password: ");
   getString(admin.password, 100);
 
@@ -376,7 +403,16 @@ void addNewAdmin(){
   clearConsole();
   printf("New User\n");
   printf("Username: ");
-  getString(admin.username, 100);
+  do{
+    moveCursor(11,2);
+    clearToLineEnd();
+    getString(admin.username, 100);
+
+    if(searchForAdmin(admin.username))
+      showSpecificInvalidOption("[USERNAME TAKEN]");
+  }while(searchForAdmin(admin.username));
+
+
   printf("Password: ");
   getString(admin.password, 100);
 

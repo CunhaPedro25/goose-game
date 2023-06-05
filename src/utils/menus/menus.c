@@ -311,19 +311,28 @@ void adminPage(){
         editAdmin(id);
       }
 
+      if(option == -4) {
+        printf("Search for Admin\n");
+        char search[500];
+        printf("\n> ");
+        getString(search, 500);
+
+        option = searchForAdmin(search);
+      }
+
       if(option >= 1 && option <= numAdmins)
         id = option;
     }while(option != 0);
   }
 }
 
+
+
 void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
-
-#include <string.h>
 
 int compareDates(const char* date1, const char* date2) {
     // Extract day, month, and year from date1
@@ -371,8 +380,6 @@ int compareDates(const char* date1, const char* date2) {
 
     return 0; // dates are equal
 }
-
-
 
 void sortByNumPlayersASC(int *order, int maxGames){
   Games* games = (Games*) malloc(maxGames * sizeof(Games));
