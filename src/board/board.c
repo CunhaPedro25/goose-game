@@ -231,11 +231,21 @@ void installBoards(){
       {6, 2, TRUEFALSE},
       {6, 3, MULTIPLE},
       {6, 4, WRITTEN},
-      {6, 5, END}
+      {6, 5, TRUEFALSE},
+      {5, 5, WRITTEN},
+      {4, 5, MULTIPLE},
+      {4, 4, MULTIPLE},
+      {4, 3, TRUEFALSE},
+      {3, 3, WRITTEN},
+      {2, 3, MULTIPLE},
+      {2, 4, WRITTEN},
+      {2, 5, TRUEFALSE},
+      {1, 5, MULTIPLE},
+      {1, 6, END}
   };
 
   Board small = {
-    10,
+    20,
     "small.dat",
     smallTiles
   };
@@ -260,31 +270,41 @@ void installBoards(){
   fclose(file);
 
   GameTile mediumTiles[] = {
-      {1, 1, TRUEFALSE},
-      {2, 1, END},
-      {3, 1, WRITTEN},
-      {4, 1, TRUEFALSE},
-      {5, 1, MULTIPLE},
-      {6, 1, WRITTEN},
-      {6, 2, TRUEFALSE},
-      {6, 3, MULTIPLE},
-      {6, 4, WRITTEN},
-      {6, 5, TRUEFALSE},
+      {8, 8, TRUEFALSE},
+      {8, 7, MULTIPLE},
+      {8, 6, WRITTEN},
+      {8, 5, TRUEFALSE},
+      {7, 5, MULTIPLE},
+      {6, 5, WRITTEN},
       {6, 6, TRUEFALSE},
-      {6, 7, WRITTEN},
-      {6, 8, TRUEFALSE},
-      {6, 9, MULTIPLE},
-      {5, 9, TRUEFALSE},
-      {4, 9, WRITTEN},
-      {3, 9, MULTIPLE},
-      {3, 8, WRITTEN},
-      {3, 7, TRUEFALSE},
-      {3, 6, END},
+      {6, 7, MULTIPLE},
+      {6, 8, WRITTEN},
+      {5, 8, TRUEFALSE},
+      {4, 8, TRUEFALSE},
+      {4, 7, WRITTEN},
+      {4, 6, TRUEFALSE},
+      {4, 5, MULTIPLE},
+      {4, 4, TRUEFALSE},
+      {4, 3, WRITTEN},
+      {5, 3, MULTIPLE},
+      {6, 3, WRITTEN},
+      {7, 3, TRUEFALSE},
+      {8, 3, MULTIPLE},
+      {8, 2, WRITTEN},
+      {8, 1, WRITTEN},
+      {7, 1, TRUEFALSE},
+      {6, 1, WRITTEN},
+      {5, 1, TRUEFALSE},
+      {4, 1, MULTIPLE},
+      {3, 1, TRUEFALSE},
+      {2, 1, MULTIPLE},
+      {1, 1, WRITTEN},
+      {1, 2, END},
   };
 
 
   Board medium = {
-    20,
+    30,
     "medium.dat",
     mediumTiles
   };
@@ -303,6 +323,74 @@ void installBoards(){
 
     // Write the gameTiles data to the file
     fwrite(medium.gameTiles, sizeof(GameTile), medium.numberOfTiles, file);
+  }
+
+  fclose(file);
+
+  GameTile largeTiles[] = {
+      {0, 0, TRUEFALSE},
+      {0, 1, MULTIPLE},
+      {0, 2, WRITTEN},
+      {0, 3, TRUEFALSE},
+      {0, 4, MULTIPLE},
+      {0, 5, WRITTEN},
+      {0, 6, TRUEFALSE},
+      {0, 7, MULTIPLE},
+      {1, 7, TRUEFALSE},
+      {2, 7, WRITTEN},
+      {3, 7, TRUEFALSE},
+      {3, 6, MULTIPLE},
+      {3, 5, WRITTEN},
+      {3, 4, TRUEFALSE},
+      {4, 4, MULTIPLE},
+      {5, 4, TRUEFALSE},
+      {5, 5, WRITTEN},
+      {5, 6, MULTIPLE},
+      {5, 7, TRUEFALSE},
+      {6, 7, WRITTEN},
+      {7, 7, MULTIPLE},
+      {8, 7, WRITTEN},
+      {8, 6, TRUEFALSE},
+      {8, 5, MULTIPLE},
+      {8, 4, WRITTEN},
+      {8, 3, TRUEFALSE},
+      {8, 2, MULTIPLE},
+      {8, 1, TRUEFALSE},
+      {8, 0, MULTIPLE},
+      {7, 0, WRITTEN},
+      {6, 0, TRUEFALSE},
+      {5, 0, WRITTEN},
+      {4, 0, TRUEFALSE},
+      {3, 0, WRITTEN},
+      {2, 0, MULTIPLE},
+      {2, 1, TRUEFALSE},
+      {2, 2, WRITTEN},
+      {3, 2, MULTIPLE},
+      {4, 2, TRUEFALSE},
+      {5, 2, END},
+  };
+
+
+  Board large = {
+    40,
+    "large.dat",
+    largeTiles
+  };
+
+  snprintf(fullPath, EXTRA_PATH_LENGTH, "%s%s", platformPath, large.name);
+  file = fopen(fullPath, "rb");
+  if(file == NULL){
+    file = fopen(fullPath, "wb");
+    if(file == NULL){
+      return;
+    }
+
+    // Write the board data to the file
+    fwrite(&large.numberOfTiles, sizeof(int), 1, file);
+    fwrite(&large.name, sizeof(char), 20, file);
+
+    // Write the gameTiles data to the file
+    fwrite(large.gameTiles, sizeof(GameTile), large.numberOfTiles, file);
   }
 
   fclose(file);
